@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=StartingScreen
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ StartingScreen\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=
+comment1.target=StartingScreen()
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ StartingScreen.\r\n\ \r\n
+comment2.params=
+comment2.target=void\ act()
+comment3.params=color1\ color2\ currentStep
+comment3.target=greenfoot.Color\ fade(greenfoot.Color,\ greenfoot.Color,\ int)
+numComments=4

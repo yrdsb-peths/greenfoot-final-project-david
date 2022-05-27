@@ -1,3 +1,0 @@
-# Greenfoot Project
-# Initial files
- 
