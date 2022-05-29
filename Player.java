@@ -7,6 +7,10 @@ import java.util.*;
  */
 public class Player extends ScrollActor
 {
+    // Movement keybinds
+    public String jump = "space";
+    public String left = "a";
+    public String right = "d";
     // Movement speeds in the x and y directions. Positive is to the right (for x) or down (for y)
     private int vY = 0;
     private int vX = 0;
@@ -31,7 +35,7 @@ public class Player extends ScrollActor
     private GreenfootImage[] fallL = new GreenfootImage[2];
     private GreenfootImage[] jumpS = new GreenfootImage[4];
     private GreenfootImage[] jumpSL = new GreenfootImage[4];
-    private GreenfootImage jump = new GreenfootImage("jump3.png");
+    private GreenfootImage jumpSprite = new GreenfootImage("jump3.png");
     
     /**
      * Constructs a player object and sets up the arrays of sprites with proper images
@@ -143,7 +147,7 @@ public class Player extends ScrollActor
                 mirror.mirrorHorizontally();
                 setImage(mirror);
             }else if(dir == 1){
-                setImage(jump);
+                setImage(jumpSprite);
             }
         }else if(!canJump){
             int jumpFrame = frames%12/3;

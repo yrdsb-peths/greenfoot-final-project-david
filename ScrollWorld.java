@@ -21,6 +21,8 @@ public abstract class ScrollWorld extends World
 
     private final GreenfootImage bigBackground, back; // 2 images to make modifying background easier
     private int scrollPosX, scrollPosY; // For scrolling the background
+    
+    public static int volume = 50;
 
     /** Sets up a ScrollWorld. */
     public ScrollWorld(int width, int height, int cellSize, boolean inverted)
@@ -163,5 +165,10 @@ public abstract class ScrollWorld extends World
     public int getCameraY()
     {
         return camY;
+    }
+    
+    public void changeWorld(World world){
+        TransitionAssist temp = new TransitionAssist(world);
+        addObject(temp,width/2,height/2);
     }
 }

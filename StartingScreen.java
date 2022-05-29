@@ -49,8 +49,13 @@ public class StartingScreen extends ScrollWorld
     public void act(){
         MouseInfo m = Greenfoot.getMouseInfo();
         if(Greenfoot.mouseClicked(start)){
-            World1 world = new World1();
-            Greenfoot.setWorld(world);
+            changeWorld(new World1());
+        }
+        if(Greenfoot.mouseClicked(help)){
+            changeWorld(new Help());
+        }
+        if(Greenfoot.mouseClicked(settings)){
+            changeWorld(new Settings());
         }
         if(currentStep < totalColorChangeSteps){
             title.setFillColor(fade(title.getFillColor(),color2,currentStep));
