@@ -13,13 +13,13 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Label extends Actor
 {
     private String value;
-    private int fontSize;
+    private int fontSize  = 30;
     private Color lineColor = Color.BLACK;
     private Color fillColor = Color.WHITE;
-    
+    private GreenfootImage image;
+
     private static final Color transparent = new Color(0,0,0,0);
 
-    
     /**
      * Create a new label, initialise it with the int value to be shown and the font size 
      */
@@ -27,7 +27,7 @@ public class Label extends Actor
     {
         this(Integer.toString(value), fontSize);
     }
-    
+
     /**
      * Create a new label, initialise it with the needed text and the font size 
      */
@@ -37,13 +37,14 @@ public class Label extends Actor
         this.fontSize = fontSize;
         updateImage();
     }
-    
+
     public Label(GreenfootImage image){
+        this.image = image;
         updateImage(image);
     }
-    
+
     /**
-     * Sets the value  as text
+     * Sets the value as text
      * 
      * @param value the text to be show
      */
@@ -52,7 +53,7 @@ public class Label extends Actor
         this.value = value;
         updateImage();
     }
-    
+
     /**
      * Sets the value as integer
      * 
@@ -63,7 +64,12 @@ public class Label extends Actor
         this.value = Integer.toString(value);
         updateImage();
     }
-    
+
+    public void setFontSize(int fontSize){
+        this.fontSize = fontSize;
+        updateImage();
+    }
+
     /**
      * Sets the line color of the text
      * 
@@ -74,7 +80,7 @@ public class Label extends Actor
         this.lineColor = lineColor;
         updateImage();
     }
-    
+
     /**
      * Sets the fill color of the text
      * 
@@ -85,7 +91,7 @@ public class Label extends Actor
         this.fillColor = fillColor;
         updateImage();
     }
-    
+
     public Color getFillColor(){
         return fillColor;
     }
@@ -93,12 +99,20 @@ public class Label extends Actor
     /**
      * Update the image on screen to show the current value.
      */
-    private void updateImage()
+    public void updateImage()
     {
-        setImage(new GreenfootImage(value, fontSize, fillColor, transparent, lineColor));
+        if(image == null){
+            setImage(new GreenfootImage(value, fontSize, fillColor, transparent, lineColor));
+        }else{
+            image.setColor(Color.WHITE);
+            image.fill();
+            image.setColor(Color.BLACK);
+            image.setFont(new Font(fontSize));
+            image.drawString(value,image.getWidth()/2-value.length()*fontSize/4+1,image.getHeight()*fontSize/20-fontSize/4);
+        }
     }
-    
-    private void updateImage(GreenfootImage image){
+
+    public void updateImage(GreenfootImage image){
         setImage(image);
     }
 }

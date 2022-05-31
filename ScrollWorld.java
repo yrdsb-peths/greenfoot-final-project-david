@@ -168,7 +168,7 @@ public abstract class ScrollWorld extends World
     }
     
     public void changeWorld(World world){
-        TransitionAssist temp = new TransitionAssist(world);
+        TransitionAssist temp = new TransitionAssist(world,true);
         addObject(temp,width/2,height/2);
     }
 }

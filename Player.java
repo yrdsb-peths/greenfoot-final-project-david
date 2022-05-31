@@ -8,9 +8,9 @@ import java.util.*;
 public class Player extends ScrollActor
 {
     // Movement keybinds
-    public String jump = "space";
-    public String left = "a";
-    public String right = "d";
+    public static String jump = "space";
+    public static String left = "a";
+    public static String right = "d";
     // Movement speeds in the x and y directions. Positive is to the right (for x) or down (for y)
     private int vY = 0;
     private int vX = 0;
@@ -123,17 +123,17 @@ public class Player extends ScrollActor
     }
     /** To control player movement */
     public void movement(){
-        if((Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) && !left()){
+        if(Greenfoot.isKeyDown(left) && !left()){
             vX = -5;
         }
-        if((Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) && !right()){
+        if(Greenfoot.isKeyDown(right) && !right()){
             vX = 5;
         }
-        if((Greenfoot.isKeyDown("up") || Greenfoot.isKeyDown("space")) && ground()){
+        if(Greenfoot.isKeyDown(jump)&& ground()){
             vY = -15;
             jumped = true;
         }
-        if(!ground() && ((Greenfoot.isKeyDown("up") || Greenfoot.isKeyDown("space")) && canJump && platformDY >= 70)){
+        if(!ground() && Greenfoot.isKeyDown(jump) && canJump && platformDY >= 95){
             vY = -15;
             canJump = false;
             jumped = true;
@@ -167,7 +167,7 @@ public class Player extends ScrollActor
             }
         }
         if(ground() && vX == 0){
-            int idleFrame = frames % 20/5;
+            int idleFrame = frames % 24/6;
             if(dir == -1){
                 setImage(idleL[idleFrame]);
             }else{
