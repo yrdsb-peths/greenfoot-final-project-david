@@ -18,7 +18,9 @@ public class Settings extends ScrollWorld
     private Label jumpKey;
     private Label rightKey;
     private Label leftKey;
+    private Label volumeValue;
     private Scroller scroller = new Scroller();
+    private int newVolume = -1;
     /**
      * Constructor for objects of class Settings.
      * 
@@ -59,6 +61,9 @@ public class Settings extends ScrollWorld
 
         Label left = new Label("Left",30);
         addObject(left,110,290);
+        
+        Label volume = new Label("Volume",30);
+        addObject(volume,450,200);
 
         jumpKey = new Label(new GreenfootImage("white.png"));
         jumpKey.setValue(Player.jump);
@@ -74,6 +79,11 @@ public class Settings extends ScrollWorld
         leftKey.setValue(Player.left);
         leftKey.setFontSize(20);
         addObject(leftKey,240,290);
+        
+        volumeValue = new Label(new GreenfootImage("white.png"));
+        volumeValue.setValue(ScrollWorld.volume);
+        volumeValue.setFontSize(20);
+        addObject(volumeValue,580,200);
 
         addCameraFollower(scroller,0,0);
     }
@@ -88,6 +98,24 @@ public class Settings extends ScrollWorld
         if(Greenfoot.mouseClicked(leftKey)){
             Player.left = changeKey(leftKey);
         }
+        if(Greenfoot.mouseClicked(volumeValue)){
+            try{
+                newVolume = Integer.parseInt(Greenfoot.ask("Enter the new volume: "));
+            }catch(NumberFormatException e){
+                // To prevent strings with chars from causing errors with Integer.parseInt();
+            }
+            while(newVolume < 0 || newVolume > 100 || newVolume == -1){
+                try{
+                    newVolume = Integer.parseInt(Greenfoot.ask("Invalid value. Please reenter the desired volume (1-100): "));
+                }catch(NumberFormatException e){
+                    // To prevent strings with chars from causing errors with Integer.parseInt();
+                }
+                scroller.act();
+                repaint();
+            }
+            ScrollWorld.volume = newVolume;
+            volumeValue.setValue(newVolume);
+        }
         String clearGetKey = Greenfoot.getKey();
     }
 
@@ -99,7 +127,6 @@ public class Settings extends ScrollWorld
             repaint();
         }
         action.setValue(newKey);
-        action.updateImage();
         return newKey;
     }
 }

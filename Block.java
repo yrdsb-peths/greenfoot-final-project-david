@@ -16,9 +16,11 @@ public class Block extends ScrollActor
     private int count = 0;
     private long time;
     private boolean setPos = true;
-    public Block(boolean disappear){
+    public Block(boolean disappear,GreenfootImage image){
         this.disappear = disappear;
+        setImage(image);
     }
+    
     public void act()
     {
         time = System.currentTimeMillis();

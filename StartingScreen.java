@@ -31,7 +31,7 @@ public class StartingScreen extends ScrollWorld
         startButton.setFont(constantia);
         startButton.drawString("START",50,28);
         helpButton.setFont(constantia);
-        helpButton.drawString("HELP",60,28);
+        helpButton.drawString("STORY",50,28);
         settingsButton.setFont(constantia);
         settingsButton.drawString("SETTINGS",30,28);
         start = new Label(startButton);
@@ -49,7 +49,7 @@ public class StartingScreen extends ScrollWorld
     public void act(){
         MouseInfo m = Greenfoot.getMouseInfo();
         if(Greenfoot.mouseClicked(start)){
-            changeWorld(new World1());
+            changeWorld(new Level1());
         }
         if(Greenfoot.mouseClicked(help)){
             changeWorld(new Help());

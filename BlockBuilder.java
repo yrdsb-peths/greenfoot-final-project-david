@@ -27,11 +27,11 @@ public class BlockBuilder extends ScrollActor
         }
         setLocation(x,y);
         if(button == 1){
-            Block block = new Block(false);
+            Block block = new Block(false,new GreenfootImage("magma block.png"));
             getWorld().addObject(block, m.getX(), m.getY());
         }
         if(button == 3){
-            Block block = new Block(true);
+            Block block = new Block(true,new GreenfootImage("magma block.png"));
             getWorld().addObject(block, m.getX(), m.getY());
         }
     }

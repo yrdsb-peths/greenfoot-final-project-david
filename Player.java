@@ -204,7 +204,7 @@ public class Player extends ScrollActor
             }
             if(temp != null){
                 int blockY = temp.getY();
-                int shiftY = 150/2+58/2-(blockY-getY());
+                int shiftY = temp.getImage().getHeight()/2+58/2-(blockY-getY());
                 getWorld().moveCam(0, -shiftY);
                 movedY -= shiftY;
                 vY = 0;
