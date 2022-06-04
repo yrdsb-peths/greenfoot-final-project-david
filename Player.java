@@ -8,9 +8,9 @@ import java.util.*;
 public class Player extends ScrollActor
 {
     // Movement keybinds
-    public static String jump = "space";
-    public static String left = "a";
-    public static String right = "d";
+    public static String jump = "up";
+    public static String left = "left";
+    public static String right = "right";
     // Movement speeds in the x and y directions. Positive is to the right (for x) or down (for y)
     private int vY = 0;
     private int vX = 0;
@@ -36,6 +36,8 @@ public class Player extends ScrollActor
     private GreenfootImage[] jumpS = new GreenfootImage[4];
     private GreenfootImage[] jumpSL = new GreenfootImage[4];
     private GreenfootImage jumpSprite = new GreenfootImage("jump3.png");
+    
+    private boolean warpedToCheckpoint = false;
     
     /**
      * Constructs a player object and sets up the arrays of sprites with proper images
@@ -69,8 +71,8 @@ public class Player extends ScrollActor
             platformDY = 0;
             canJump = true;
             // movedX and movedY here are only for testing; remove these to use checkpoints effectively
-            movedX = 0;
-            movedY = 0;
+            //movedX = 0;
+            //movedY = 0;
         }else{
             vY += g;
         }
@@ -111,6 +113,8 @@ public class Player extends ScrollActor
             vX = 0;
             movedX = 0;
             movedY = 0;
+            warpedToCheckpoint = true;
+            checkStuckY();
         }
     }
     /** Sets the direction of the sprites to be used */
@@ -124,10 +128,10 @@ public class Player extends ScrollActor
     /** To control player movement */
     public void movement(){
         if(Greenfoot.isKeyDown(left) && !left()){
-            vX = -5;
+            vX -= 5;
         }
         if(Greenfoot.isKeyDown(right) && !right()){
-            vX = 5;
+            vX += 5;
         }
         if(Greenfoot.isKeyDown(jump)&& ground()){
             vY = -15;
@@ -189,7 +193,7 @@ public class Player extends ScrollActor
      *  If they are, shifts the player up/down appropriately so that they are no longer in the block
      */
     public void checkStuckY(){
-        if(checkStuckB() && !checkStuckT() && vY != 0){
+        if(checkStuckB() && !checkStuckT() && (vY != 0 || warpedToCheckpoint)){
             Block temp = null;
             if(dir == 1){
                 temp = (Block) getOneObjectAtOffset(38/2-3, 58/2, Block.class);
@@ -209,8 +213,9 @@ public class Player extends ScrollActor
                 movedY -= shiftY;
                 vY = 0;
             }
+            warpedToCheckpoint = false;
         }
-        if(checkStuckT() && !checkStuckB() && vY != 0){
+        if(checkStuckT() && !checkStuckB() && (vY != 0 || warpedToCheckpoint)){
             Block temp1 = null;
             if(dir == 1){
                 temp1 = (Block) getOneObjectAtOffset(38/2-3, -58/2, Block.class);
@@ -230,13 +235,14 @@ public class Player extends ScrollActor
                 movedY += shiftY1;
                 vY = 0;
             }
+            warpedToCheckpoint = false;
         }
     }
     /** Checks whether the player overlaps with a block in the x direction (left/right)
      *  If so, the player is shifted left/right appropriately so that they are no longer in the block
      */
     public void checkStuckX(){
-        if(checkStuckL() && !checkStuckR() && vX != 0){
+        if(checkStuckL() && !checkStuckR() && (vX != 0 || warpedToCheckpoint)){
             Block temp = (Block) getOneObjectAtOffset(-38/2+3, 58/2-1, Block.class);
             if(temp == null){
                 temp = (Block) getOneObjectAtOffset(-38/2+3, -58/2+1, Block.class);
@@ -248,7 +254,7 @@ public class Player extends ScrollActor
                 movedX += shiftX;
             }
         }
-        if(checkStuckR() && !checkStuckL() && vX != 0){
+        if(checkStuckR() && !checkStuckL() && (vX != 0 || warpedToCheckpoint)){
             Block temp1 = (Block) getOneObjectAtOffset(38/2-3, 58/2-1, Block.class);
             if(temp1 == null){
                 temp1 = (Block) getOneObjectAtOffset(38/2-3, -58/2+1, Block.class);

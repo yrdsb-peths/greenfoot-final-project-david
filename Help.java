@@ -10,6 +10,8 @@ public class Help extends ScrollWorld
 {
     Label description;
     Font constantia = new Font("Constantia",true,false,40);
+    Block[] allBlocks = new Block[4];
+    Label desc;
     /**
      * Constructor for objects of class Help.
      * 
@@ -17,6 +19,21 @@ public class Help extends ScrollWorld
     public Help()
     {
         super(711,400,1,true);
+
+        Player demo = new Player();
+        addCameraFollower(demo,132,60);
+
+        GreenfootImage ground = new GreenfootImage("grass block.png");
+        ground.scale(65,65);
+
+        for(int i = 0; i < 4; i++){
+            Block demoGround = new Block(false,ground);
+            addObject(demoGround, 400+i*65,325);
+            allBlocks[i] = demoGround;
+        }
+        
+        Label frame = new Label(new GreenfootImage("frame-1.png"));
+        addObject(frame,711/2,400/2);
         
         GreenfootImage backButton = new GreenfootImage("orangeButton.png");
         backButton.setFont(constantia);
@@ -25,16 +42,26 @@ public class Help extends ScrollWorld
         BackButton back = new BackButton(new StartingScreen(),backButton);
         addObject(back,70,22);
         
-        addCameraFollower(new Scroller(),getWidth()/2,getHeight()/2);
-        description = new Label("You are a traveller setting off on a journey.\n" + 
-                                "You will journey through many biomes and endure\n" + 
-                                "many hardships.\n" + 
-                                "At the end of it all, you will see great wonders.\n" + 
-                                "Enjoy you journey, traveller!",35);
-        addObject(description,getWidth()/2,getHeight()/2);
+        desc = new Label("The default controls for movement are:\n" + 
+                          "'up arrow' — jump\n" + 
+                          "'left arrow' — move left\n" + 
+                          "'right arrow' — move right\n" + 
+                          "It is also possible to jump in midair once\n" + 
+                          "for each jump that starts on the ground\n" + 
+                          "The controls can be changed in the settings,\n" + 
+                          "which can be accessed in the home screen\n" + 
+                          "Feel free to use the zone on the right to test\n" + 
+                          "movement",27);
+        addObject(desc,212,200);
     }
-    
+
     public void act(){
-        
+        for(Block block : allBlocks){
+            if(block.getX() < 335){
+                block.setLocation(block.getX()+4*65,block.getY());
+            }else if(block.getX() > 665){
+                block.setLocation(block.getX()-4*65,block.getY());
+            }
+        }
     }
 }

@@ -16,9 +16,11 @@ public class StartingScreen extends ScrollWorld
     GreenfootImage startButton = new GreenfootImage("orangeButton.png");
     GreenfootImage helpButton = new GreenfootImage("orangeButton.png");
     GreenfootImage settingsButton = new GreenfootImage("orangeButton.png");
+    GreenfootImage storyButton = new GreenfootImage("orangeButton.png");
     Label start;
     Label help;
     Label settings;
+    Label story;
     Label title;
     /**
      * Constructor for objects of class StartingScreen.
@@ -31,18 +33,22 @@ public class StartingScreen extends ScrollWorld
         startButton.setFont(constantia);
         startButton.drawString("START",50,28);
         helpButton.setFont(constantia);
-        helpButton.drawString("STORY",50,28);
+        helpButton.drawString("HELP",50,28);
         settingsButton.setFont(constantia);
         settingsButton.drawString("SETTINGS",30,28);
+        storyButton.setFont(constantia);
+        storyButton.drawString("STORY",50,20);
         start = new Label(startButton);
         help = new Label(helpButton);
         settings = new Label(settingsButton);
+        story = new Label(storyButton);
         title = new Label("Traveller's Journey",60);
         title.setFillColor(color1);
         addObject(start,175,150);
-        addObject(help,175,200);
+        addObject(story,175,200);
         addObject(settings,175,250);
         addObject(title,260,70);
+        addObject(help,175,300);
         addCameraFollower(new Scroller(),0,0);
     }
 
@@ -56,6 +62,9 @@ public class StartingScreen extends ScrollWorld
         }
         if(Greenfoot.mouseClicked(settings)){
             changeWorld(new Settings());
+        }
+        if(Greenfoot.mouseClicked(story)){
+            changeWorld(new Story());
         }
         if(currentStep < totalColorChangeSteps){
             title.setFillColor(fade(title.getFillColor(),color2,currentStep));

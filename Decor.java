@@ -1,21 +1,19 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class CheckPoint here.
+ * Write a description of class Decor here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Checkpoint extends ScrollActor
+public class Decor extends ScrollActor
 {
     /**
-     * Act - do whatever the CheckPoint wants to do. This method is called whenever
+     * Act - do whatever the Decor wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     
-    public Checkpoint(){
-        GreenfootImage image = getImage();
-        image.scale(48,58);
+    public Decor(GreenfootImage image){
         setImage(image);
     }
     
