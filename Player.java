@@ -23,6 +23,8 @@ public class Player extends ScrollActor
     private boolean canJump = true;
     private boolean jumped = false;
     private int platformDY = 0;
+    private int markFrame = 0;
+    private boolean canHead = true;
     // Direction that the player is facing and frame count (number of times act() is run). Both are used for sprites
     private int dir = 1;
     private int frames = 0;
@@ -71,13 +73,15 @@ public class Player extends ScrollActor
             platformDY = 0;
             canJump = true;
             // movedX and movedY here are only for testing; remove these to use checkpoints effectively
-            //movedX = 0;
-            //movedY = 0;
-        }else{
-            vY += g;
+            // movedX = 0;
+            // movedY = 0;
         }
-        if(head()){
+        if(head() && canHead){
             vY = 0;
+            canHead = false;
+        }
+        if(!ground()){
+            vY += 1;
         }
         
         movement();
@@ -107,8 +111,9 @@ public class Player extends ScrollActor
     }
     /** Teleports the player back to the location set by SetCheckpointLocation(), default is spawn location */
     public void warpToCheckpoint(){
-        if(vY >= 63){
+        if(platformDY >= 44*48-200){
             getWorld().moveCam(-movedX, -movedY);
+            platformDY = 0;
             vY = 0;
             vX = 0;
             movedX = 0;
@@ -136,11 +141,14 @@ public class Player extends ScrollActor
         if(Greenfoot.isKeyDown(jump)&& ground()){
             vY = -15;
             jumped = true;
+            canHead = true;
+            markFrame = frames;
         }
-        if(!ground() && Greenfoot.isKeyDown(jump) && canJump && platformDY >= 95){
+        if(!ground() && Greenfoot.isKeyDown(jump) && canJump && (frames - markFrame) >= 7){
             vY = -15;
             canJump = false;
             jumped = true;
+            canHead = true;
         }
     }
     /** To animate the player using the appropriate sprites from the arrays set up in the constructor */
@@ -155,9 +163,9 @@ public class Player extends ScrollActor
             }
         }else if(!canJump){
             int jumpFrame = frames%12/3;
-            if(dir == -1){
+            if(dir == 1){
                 setImage(jumpS[jumpFrame]);
-            }else if(dir == 1){
+            }else if(dir == -1){
                 setImage(jumpSL[jumpFrame]);
             }
             jumped = false;
@@ -210,7 +218,7 @@ public class Player extends ScrollActor
                 int blockY = temp.getY();
                 int shiftY = temp.getImage().getHeight()/2+58/2-(blockY-getY());
                 getWorld().moveCam(0, -shiftY);
-                movedY -= shiftY;
+                movedY += vY-shiftY;
                 vY = 0;
             }
             warpedToCheckpoint = false;
@@ -285,10 +293,10 @@ public class Player extends ScrollActor
         if(vY >= 0){
             return false;
         }
-        return (((getOneObjectAtOffset(-38/2, -58/2+1, Block.class) != null) && 
-                  (getOneObjectAtOffset(-38/2+1, -58/2+1, Block.class) != null)) || 
-                ((getOneObjectAtOffset(38/2, -58/2+1, Block.class) != null) && 
-                  (getOneObjectAtOffset(38/2-1, -58/2+1, Block.class) != null)));
+        return (((getOneObjectAtOffset(-38/2+6, -58/2+1, Block.class) != null) && 
+                  (getOneObjectAtOffset(-38/2+2, -58/2+1, Block.class) != null)) || 
+                ((getOneObjectAtOffset(38/2-2, -58/2+1, Block.class) != null) && 
+                  (getOneObjectAtOffset(38/2-6, -58/2+1, Block.class) != null)));
     }
     /** Checks whether or not the left of the player overlaps with a block */
     public boolean checkStuckL(){
@@ -325,11 +333,11 @@ public class Player extends ScrollActor
     /** Checks whether or not the player's head is hitting a block (includes overlap) */
     public boolean head(){
         if(dir == 1){
-            return (getOneObjectAtOffset(-38/2+5, -58/2, Block.class) != null || 
-                (getOneObjectAtOffset(38/2-3, -58/2, Block.class) != null));
+            return (getOneObjectAtOffset(-38/2+3, -58/2+1, Block.class) != null || 
+                (getOneObjectAtOffset(38/2-3, -58/2+1, Block.class) != null));
         }else{
-            return (getOneObjectAtOffset(-38/2+3, -58/2, Block.class) != null || 
-                (getOneObjectAtOffset(38/2-5, -58/2, Block.class) != null));
+            return (getOneObjectAtOffset(-38/2+3, -58/2+1, Block.class) != null || 
+                (getOneObjectAtOffset(38/2-5, -58/2+1, Block.class) != null));
         }
     }
     /** Checks whether or not the player's left is touching a block (includes overlap) */

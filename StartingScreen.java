@@ -37,7 +37,7 @@ public class StartingScreen extends ScrollWorld
         settingsButton.setFont(constantia);
         settingsButton.drawString("SETTINGS",30,28);
         storyButton.setFont(constantia);
-        storyButton.drawString("STORY",50,20);
+        storyButton.drawString("STORY",50,28);
         start = new Label(startButton);
         help = new Label(helpButton);
         settings = new Label(settingsButton);

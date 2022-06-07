@@ -50,6 +50,10 @@ public abstract class ScrollActor extends Actor
         return globalY;
     }
     
+    public int getCamY(){
+        return camY;
+    }
+    
     /** Sets your location in the larger space. */
     public void setGlobalLocation(int x, int y)
     {

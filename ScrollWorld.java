@@ -19,9 +19,9 @@ public abstract class ScrollWorld extends World
     private int camX, camY; // Position of the camera relative to the larger space
     private int startingX, startingY;
 
-    private final GreenfootImage bigBackground, back; // 2 images to make modifying background easier
+    private final GreenfootImage bigBackground, back, topExtended; // 2 images to make modifying background easier
     private int scrollPosX, scrollPosY; // For scrolling the background
-    
+
     public static int volume = 50;
 
     /** Sets up a ScrollWorld. */
@@ -33,6 +33,7 @@ public abstract class ScrollWorld extends World
         this.height = back.getHeight();
         this.cellSize = cellSize;
         this.inverted = inverted;
+        topExtended = null;
 
         objects = new ArrayList<ScrollActor>();
         camFollowers = new ArrayList<ScrollActor>();
@@ -47,7 +48,7 @@ public abstract class ScrollWorld extends World
         if(inverted){
             bigBackground = new GreenfootImage(width*3,height*2);
         }else{
-            bigBackground = new GreenfootImage(width*2, height*2);
+            bigBackground = new GreenfootImage(width*2, height*3);
         }
         setNewBackground(back);
     }
@@ -70,17 +71,15 @@ public abstract class ScrollWorld extends World
      * This is done by redrawing the background onto the current one (in the larger space)
      * at certain coordinates, depending on the movements made in the x and y directions
      */
-    private void moveBackground(int x, int y)
+    public void moveBackground(int x, int y)
     {
+        scrollPosY -= y;
+        scrollPosX -= x;
         if(inverted){
-            scrollPosY -= y;
-            scrollPosX -= x;
             scrollPosY %= getHeight()*2;
             scrollPosX %= getWidth()*2;
             getBackground().drawImage(bigBackground, scrollPosX,scrollPosY);
         }else{
-            scrollPosY -= y;
-            scrollPosX -= x;
             while (scrollPosY < 0){
                 scrollPosY += getHeight();
             }
@@ -94,23 +93,25 @@ public abstract class ScrollWorld extends World
     }
 
     /** Sets the background of the world to be extra large (larger space) */
-    public void setNewBackground(GreenfootImage background)
+    private void setNewBackground(GreenfootImage background)
     {
         if(inverted){
-            bigBackground.drawImage(background, 0,0);
             bigBackground.drawImage(background, 0,background.getHeight());
-            bigBackground.drawImage(background, background.getWidth()*2,0);
             bigBackground.drawImage(background, background.getWidth()*2,background.getHeight());
+            bigBackground.drawImage(background, background.getWidth()*2,0);
+            bigBackground.drawImage(background, 0,0);
             background.mirrorHorizontally();
-            bigBackground.drawImage(background, background.getWidth(),0);
             bigBackground.drawImage(background, background.getWidth(),background.getHeight());
+            bigBackground.drawImage(background, background.getWidth(),0);
             back.clear();
             back.drawImage(bigBackground, scrollPosX,scrollPosY);
         }else{
-            bigBackground.drawImage(background, 0,0);
-            bigBackground.drawImage(background, background.getWidth(),0);
             bigBackground.drawImage(background, 0,background.getHeight());
             bigBackground.drawImage(background, background.getWidth(),background.getHeight());
+            bigBackground.drawImage(background, 0,0);
+            bigBackground.drawImage(background, background.getWidth(),0);
+            bigBackground.drawImage(background,background.getWidth()*2,0);
+            bigBackground.drawImage(background,background.getWidth()*2,background.getHeight());
             back.clear();
             back.drawImage(bigBackground, scrollPosX,scrollPosY);
         }
@@ -166,7 +167,7 @@ public abstract class ScrollWorld extends World
     {
         return camY;
     }
-    
+
     public void changeWorld(World world){
         TransitionAssist temp = new TransitionAssist(world,true);
         addObject(temp,width/2,height/2);

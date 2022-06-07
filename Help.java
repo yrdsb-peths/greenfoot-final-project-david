@@ -21,14 +21,14 @@ public class Help extends ScrollWorld
         super(711,400,1,true);
 
         Player demo = new Player();
-        addCameraFollower(demo,132,60);
+        addCameraFollower(demo,213,50);
 
         GreenfootImage ground = new GreenfootImage("grass block.png");
         ground.scale(65,65);
 
         for(int i = 0; i < 4; i++){
             Block demoGround = new Block(false,ground);
-            addObject(demoGround, 400+i*65,325);
+            addObject(demoGround, 425+i*65,315);
             allBlocks[i] = demoGround;
         }
         
@@ -52,14 +52,14 @@ public class Help extends ScrollWorld
                           "which can be accessed in the home screen\n" + 
                           "Feel free to use the zone on the right to test\n" + 
                           "movement",27);
-        addObject(desc,212,200);
+        addObject(desc,250,220);
     }
 
     public void act(){
         for(Block block : allBlocks){
-            if(block.getX() < 335){
+            if(block.getX() < 415){
                 block.setLocation(block.getX()+4*65,block.getY());
-            }else if(block.getX() > 665){
+            }else if(block.getX() > 715){
                 block.setLocation(block.getX()-4*65,block.getY());
             }
         }
