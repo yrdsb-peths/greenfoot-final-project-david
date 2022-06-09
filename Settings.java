@@ -22,11 +22,17 @@ public class Settings extends ScrollWorld
     private Label volumeValue;
     private Scroller scroller = new Scroller();
     private int newVolume = -1;
+    private BackButton back;
     /**
      * Constructor for objects of class Settings.
      * 
      */
-    public Settings(World prevWorld)
+
+    public Settings(){
+        this(null);
+    }
+
+    public Settings(Levels prevWorld)
     {
         super(711,400,1,true);
 
@@ -34,7 +40,11 @@ public class Settings extends ScrollWorld
         backButton.setFont(constantia);
         backButton.drawString("BACK",45,30);
         backButton.scale(100,18);
-        BackButton back = new BackButton(prevWorld,backButton);
+        if(prevWorld != null){
+            back = new BackButton(prevWorld,backButton);
+        }else{
+            back = new BackButton(new StartingScreen(),backButton);
+        }
         addCameraFollower(back,70-getWidth()/2,22-getHeight()/2);
 
         panel.setColor(new Color(200,200,200));
@@ -62,10 +72,10 @@ public class Settings extends ScrollWorld
 
         Label left = new Label("Left",30);
         addObject(left,110,260);
-        
+
         Label dash = new Label("Dash",30);
         addObject(dash,110,320);
-        
+
         Label volume = new Label("Volume",30);
         addObject(volume,450,200);
 
@@ -83,12 +93,12 @@ public class Settings extends ScrollWorld
         leftKey.setValue(Player.left);
         leftKey.setFontSize(20);
         addObject(leftKey,240,260);
-        
+
         dashKey = new Label(new GreenfootImage("white.png"));
         dashKey.setValue(Player.dash);
         dashKey.setFontSize(20);
         addObject(dashKey,240,320);
-        
+
         volumeValue = new Label(new GreenfootImage("white.png"));
         volumeValue.setValue(ScrollWorld.volume);
         volumeValue.setFontSize(20);
@@ -134,7 +144,7 @@ public class Settings extends ScrollWorld
     public String changeKey(Label action){
         String newKey = Greenfoot.getKey();
         while(newKey == null || newKey.equals(Player.jump) || newKey.equals(Player.right) || 
-                newKey.equals(Player.left) || newKey.equals(Player.dash) || newKey.equals("Enter")){
+        newKey.equals(Player.left) || newKey.equals(Player.dash) || newKey.equals("Enter")){
             newKey = Greenfoot.getKey();
             scroller.act();
             repaint();

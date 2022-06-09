@@ -50,6 +50,8 @@ public class Player extends ScrollActor
 
     public static boolean paused = false;
     public static int level = 0;
+    public static boolean help = false;
+    public static Levels[] levels = {new Level1(),new Level2()};
 
     /**
      * Constructs a player object and sets up the arrays of sprites with proper images
@@ -120,8 +122,10 @@ public class Player extends ScrollActor
             platformDY += Math.abs(vY);
             movedX += vX;
             movedY += vY;
-            saveX += vX;
-            saveY += vY;
+            if(!help){
+                saveX += vX;
+                saveY += vY;
+            }
             if(!isDashing){
                 vX = 0;
             }
@@ -181,7 +185,7 @@ public class Player extends ScrollActor
             markFrame = frames;
             isDashing = false;
         }
-        if(!ground() && Greenfoot.isKeyDown(jump) && canJump && (frames - markFrame) >= 7){
+        if(!ground() && Greenfoot.isKeyDown(jump) && canJump && (frames - markFrame) >= 8){
             vY = -12*g;
             canJump = false;
             jumped = true;
@@ -272,7 +276,9 @@ public class Player extends ScrollActor
                 int shiftY = temp.getImage().getHeight()/2+58/2-(blockY-getY());
                 getWorld().moveCam(0, -shiftY);
                 movedY += vY-shiftY;
-                saveY += vY-shiftY;
+                if(!help){
+                    saveY += vY-shiftY;
+                }
                 vY = 0;
             }
             warpedToCheckpoint = false;

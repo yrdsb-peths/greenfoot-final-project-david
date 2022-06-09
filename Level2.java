@@ -12,6 +12,7 @@ public class Level2 extends Levels
     private GreenfootImage stone = new GreenfootImage("stone.png");
     private GreenfootImage darkness = new GreenfootImage(716,48*43);
     private Decor[] darknessScroll = new Decor[2];
+    private Decor[] ceilingScroll = new Decor[2];
     public Player player;
     /**
      * Constructor for objects of class Level2.
@@ -40,10 +41,25 @@ public class Level2 extends Levels
             addStone(-48*4+48*i,287);
         }
         addObject(new Decor(new GreenfootImage("gate.png")),getWidth()/2-5,233);
+        for(int i = 0; i < 2; i++){
+            GreenfootImage ceiling = new GreenfootImage(darkness);
+            ceiling.scale(716,400);
+            Decor ceiling1 = new Decor(ceiling);
+            ceilingScroll[i] = ceiling1;
+            addObject(ceiling1,-716/2+716*i,-getHeight()/2);
+        }
         addCameraFollower(pause,-320,-170);
     }
     
     public void act(){
+        for(Decor ceiling: ceilingScroll){
+            if(ceiling.getX() < -716/2){
+                ceiling.setLocation(ceiling.getX()+716*2,ceiling.getY());
+            }
+            if(ceiling.getX() > 716*3/2){
+                ceiling.setLocation(ceiling.getX()-716*2,ceiling.getY());
+            }
+        }
         for(Decor black: darknessScroll){
             if(black.getX() < -716/2){
                 black.setLocation(black.getX()+716*2,black.getY());

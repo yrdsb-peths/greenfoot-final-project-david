@@ -8,6 +8,7 @@ public class Level1 extends Levels
     private Decor[] darknessScroll = new Decor[2];
     public Decor exit;
     public Player player;
+    InGameText title;
 
     /**
      * Constructor for objects of class DemoWorld.
@@ -32,6 +33,14 @@ public class Level1 extends Levels
         grass.scale(48,48);
         dirt.scale(48,48);
         createSpawnPlatform(dirt,dirt1);
+        
+        GreenfootImage sign = new GreenfootImage("arrow sign.png");
+        sign.mirrorHorizontally();
+        sign.scale(40,60);
+        Decor arrow = new Decor(sign);
+        addObject(arrow,530,300);
+        Decor arrow1 = new Decor(sign);
+        addObject(arrow1,1820,250);
 
         for(int i = 0; i < 16; i++){
             addGrass(-48*4+48*i,345);
@@ -70,6 +79,10 @@ public class Level1 extends Levels
         addHouse();
 
         addCameraFollower(pause,-320,-170);
+        
+        title = new InGameText("SETTING OFF",Color.WHITE,new Font("Constantia",true,false,40),true);
+        addObject(title,520,80);
+        
     }
 
     public void act(){

@@ -1,11 +1,13 @@
 #BlueJ class context
 comment0.target=Settings
 comment0.text=\r\n\ Write\ a\ description\ of\ class\ Settings\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
-comment1.params=prevWorld
-comment1.target=Settings(greenfoot.World)
+comment1.params=
+comment1.target=Settings()
 comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ Settings.\r\n\ \r\n
-comment2.params=
-comment2.target=void\ act()
-comment3.params=action
-comment3.target=java.lang.String\ changeKey(Label)
-numComments=4
+comment2.params=prevWorld
+comment2.target=Settings(Levels)
+comment3.params=
+comment3.target=void\ act()
+comment4.params=action
+comment4.target=java.lang.String\ changeKey(Label)
+numComments=5

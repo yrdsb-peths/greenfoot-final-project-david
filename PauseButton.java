@@ -20,9 +20,9 @@ public class PauseButton extends ScrollActor
     
     public void setup(){
         GreenfootImage pause = new GreenfootImage("orangeButton.png");
-        pause.scale(20,20);
+        pause.scale(30,30);
         GreenfootImage breaker = new GreenfootImage("pause.png");
-        breaker.scale(20,20);
+        breaker.scale(32,30);
         pause.drawImage(breaker,0,0);
         setImage(pause);
     }

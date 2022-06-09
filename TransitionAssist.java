@@ -33,8 +33,9 @@ public class TransitionAssist extends Actor
             fade.fill();
             setImage(fade);
         }
-        if(frames == 28){
+        if(frames >= 28){
             Player.paused = false;
+            getWorld().removeObject(this);
             Greenfoot.setWorld(world);
         }
         frames++;

@@ -40,12 +40,13 @@ public class Help extends ScrollWorld
         backButton.drawString("BACK",45,30);
         backButton.scale(100,18);
         BackButton back = new BackButton(new StartingScreen(),backButton);
-        addObject(back,70,22);
+        addCameraFollower(back,70-getWidth()/2,22-getHeight()/2);
         
         desc = new Label("The default controls for movement are:\n" + 
                           "'up arrow' — jump\n" + 
                           "'left arrow' — move left\n" + 
                           "'right arrow' — move right\n" + 
+                          "'0' — dash\n" + 
                           "It is also possible to jump in midair once\n" + 
                           "for each jump that starts on the ground\n" + 
                           "The controls can be changed in the settings,\n" + 
@@ -53,6 +54,7 @@ public class Help extends ScrollWorld
                           "Feel free to use the zone on the right to test\n" + 
                           "movement",27);
         addObject(desc,250,220);
+        Player.help = true;
     }
 
     public void act(){

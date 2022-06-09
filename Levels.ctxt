@@ -8,4 +8,6 @@ comment2.params=
 comment2.target=void\ addPauseButton()
 comment3.params=
 comment3.target=void\ clickedPauseButton()
-numComments=4
+comment4.params=
+comment4.target=void\ removePausePanel()
+numComments=5

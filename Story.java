@@ -23,7 +23,7 @@ public class Story extends ScrollWorld
         backButton.drawString("BACK",45,30);
         backButton.scale(100,18);
         BackButton back = new BackButton(new StartingScreen(),backButton);
-        addObject(back,70,22);
+        addCameraFollower(back,70-getWidth()/2,22-getHeight()/2);
         
         addCameraFollower(new Scroller(),getWidth()/2,getHeight()/2);
         description = new Label("You are a traveller setting off on a journey.\n" + 

@@ -17,7 +17,6 @@ public class StartingScreen extends ScrollWorld
     GreenfootImage helpButton = new GreenfootImage("orangeButton.png");
     GreenfootImage settingsButton = new GreenfootImage("orangeButton.png");
     GreenfootImage storyButton = new GreenfootImage("orangeButton.png");
-    public static Levels[] levels = new Levels[2];
     Label start;
     Label help;
     Label settings;
@@ -34,7 +33,7 @@ public class StartingScreen extends ScrollWorld
         startButton.setFont(constantia);
         startButton.drawString("START",50,28);
         helpButton.setFont(constantia);
-        helpButton.drawString("HELP",50,28);
+        helpButton.drawString("HELP",60,28);
         settingsButton.setFont(constantia);
         settingsButton.drawString("SETTINGS",30,28);
         storyButton.setFont(constantia);
@@ -43,29 +42,29 @@ public class StartingScreen extends ScrollWorld
         help = new Label(helpButton);
         settings = new Label(settingsButton);
         story = new Label(storyButton);
-        title = new Label("Traveller's Journey",60);
+        title = new Label("The Journey",60);
         title.setFillColor(color1);
         addObject(start,175,150);
         addObject(story,175,200);
         addObject(settings,175,250);
-        addObject(title,260,70);
+        addObject(title,200,70);
         addObject(help,175,300);
         addCameraFollower(new Scroller(),0,0);
+        Player player = new Player();
         
-        levels[0] = new Level1();
-        levels[1] = new Level2();
+        Player.help = false;
     }
 
     public void act(){
         MouseInfo m = Greenfoot.getMouseInfo();
         if(Greenfoot.mouseClicked(start)){
-            changeWorld(levels[Player.level]);
+            changeWorld(Player.levels[Player.level]);
         }
         if(Greenfoot.mouseClicked(help)){
             changeWorld(new Help());
         }
         if(Greenfoot.mouseClicked(settings)){
-            changeWorld(new Settings(this));
+            changeWorld(new Settings());
         }
         if(Greenfoot.mouseClicked(story)){
             changeWorld(new Story());
