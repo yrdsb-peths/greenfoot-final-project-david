@@ -17,38 +17,25 @@ public class TransitionAssist extends Actor
     /**
      * Constructor for objects of class TransitionAssist
      */
-    public TransitionAssist(World world,boolean fadeIn)
+    public TransitionAssist(World world)
     {
         color = new Color(0,0,0,0);
         fade.setColor(color);
         fade.fill();
         setImage(fade);
         this.world = world;
-        this.fadeIn = fadeIn;
     }
 
     public void act(){
-        if(fadeIn){
-            if(frames < 28){
-                color = new Color(0,0,0,frames*8);
-                fade.setColor(color);
-                fade.fill();
-                setImage(fade);
-            }
-            if(frames == 28){
-                Greenfoot.setWorld(world);
-            }
-        }else{
-            if(frames < 28){
-                color = new Color(0,0,0,250-frames*8);
-                fade.setColor(color);
-                fade.clear();
-                fade.fill();
-                setImage(fade);
-            }
-            if(frames == 28){
-                getWorld().removeObject(this);
-            }
+        if(frames < 28){
+            color = new Color(0,0,0,frames*8);
+            fade.setColor(color);
+            fade.fill();
+            setImage(fade);
+        }
+        if(frames == 28){
+            Player.paused = false;
+            Greenfoot.setWorld(world);
         }
         frames++;
     }

@@ -18,6 +18,7 @@ public class Settings extends ScrollWorld
     private Label jumpKey;
     private Label rightKey;
     private Label leftKey;
+    private Label dashKey;
     private Label volumeValue;
     private Scroller scroller = new Scroller();
     private int newVolume = -1;
@@ -25,7 +26,7 @@ public class Settings extends ScrollWorld
      * Constructor for objects of class Settings.
      * 
      */
-    public Settings()
+    public Settings(World prevWorld)
     {
         super(711,400,1,true);
 
@@ -33,8 +34,8 @@ public class Settings extends ScrollWorld
         backButton.setFont(constantia);
         backButton.drawString("BACK",45,30);
         backButton.scale(100,18);
-        BackButton back = new BackButton(new StartingScreen(),backButton);
-        addObject(back,70,22);
+        BackButton back = new BackButton(prevWorld,backButton);
+        addCameraFollower(back,70-getWidth()/2,22-getHeight()/2);
 
         panel.setColor(new Color(200,200,200));
         panel.fill();
@@ -54,13 +55,16 @@ public class Settings extends ScrollWorld
         addObject(othersPanel,515,210);
 
         Label jump = new Label("Jump",30);
-        addObject(jump,110,150);
+        addObject(jump,110,140);
 
         Label right = new Label("Right",30);
-        addObject(right,110,220);
+        addObject(right,110,200);
 
         Label left = new Label("Left",30);
-        addObject(left,110,290);
+        addObject(left,110,260);
+        
+        Label dash = new Label("Dash",30);
+        addObject(dash,110,320);
         
         Label volume = new Label("Volume",30);
         addObject(volume,450,200);
@@ -68,17 +72,22 @@ public class Settings extends ScrollWorld
         jumpKey = new Label(new GreenfootImage("white.png"));
         jumpKey.setValue(Player.jump);
         jumpKey.setFontSize(20);
-        addObject(jumpKey,240,150);
+        addObject(jumpKey,240,140);
 
         rightKey = new Label(new GreenfootImage("white.png"));
         rightKey.setValue(Player.right);
         rightKey.setFontSize(20);
-        addObject(rightKey,240,220);
+        addObject(rightKey,240,200);
 
         leftKey = new Label(new GreenfootImage("white.png"));
         leftKey.setValue(Player.left);
         leftKey.setFontSize(20);
-        addObject(leftKey,240,290);
+        addObject(leftKey,240,260);
+        
+        dashKey = new Label(new GreenfootImage("white.png"));
+        dashKey.setValue(Player.dash);
+        dashKey.setFontSize(20);
+        addObject(dashKey,240,320);
         
         volumeValue = new Label(new GreenfootImage("white.png"));
         volumeValue.setValue(ScrollWorld.volume);
@@ -97,6 +106,9 @@ public class Settings extends ScrollWorld
         }
         if(Greenfoot.mouseClicked(leftKey)){
             Player.left = changeKey(leftKey);
+        }
+        if(Greenfoot.mouseClicked(dashKey)){
+            Player.dash = changeKey(dashKey);
         }
         if(Greenfoot.mouseClicked(volumeValue)){
             try{
@@ -121,7 +133,8 @@ public class Settings extends ScrollWorld
 
     public String changeKey(Label action){
         String newKey = Greenfoot.getKey();
-        while(newKey == null || newKey.equals(Player.jump) || newKey.equals(Player.right) || newKey.equals(Player.left)){
+        while(newKey == null || newKey.equals(Player.jump) || newKey.equals(Player.right) || 
+                newKey.equals(Player.left) || newKey.equals(Player.dash) || newKey.equals("Enter")){
             newKey = Greenfoot.getKey();
             scroller.act();
             repaint();

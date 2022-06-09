@@ -17,6 +17,7 @@ public class StartingScreen extends ScrollWorld
     GreenfootImage helpButton = new GreenfootImage("orangeButton.png");
     GreenfootImage settingsButton = new GreenfootImage("orangeButton.png");
     GreenfootImage storyButton = new GreenfootImage("orangeButton.png");
+    public static Levels[] levels = new Levels[2];
     Label start;
     Label help;
     Label settings;
@@ -50,18 +51,21 @@ public class StartingScreen extends ScrollWorld
         addObject(title,260,70);
         addObject(help,175,300);
         addCameraFollower(new Scroller(),0,0);
+        
+        levels[0] = new Level1();
+        levels[1] = new Level2();
     }
 
     public void act(){
         MouseInfo m = Greenfoot.getMouseInfo();
         if(Greenfoot.mouseClicked(start)){
-            changeWorld(new Level1());
+            changeWorld(levels[Player.level]);
         }
         if(Greenfoot.mouseClicked(help)){
             changeWorld(new Help());
         }
         if(Greenfoot.mouseClicked(settings)){
-            changeWorld(new Settings());
+            changeWorld(new Settings(this));
         }
         if(Greenfoot.mouseClicked(story)){
             changeWorld(new Story());

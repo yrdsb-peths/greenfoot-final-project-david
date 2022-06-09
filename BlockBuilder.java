@@ -14,7 +14,7 @@ public class BlockBuilder extends ScrollActor
      */
     private int x, y = -100;
     private int camX, camY;
-    private GreenfootImage blank = new GreenfootImage(1,1);
+    private GreenfootImage blank = new GreenfootImage(5,100);
     int button = 0;
     public void act()
     {
@@ -27,7 +27,10 @@ public class BlockBuilder extends ScrollActor
         }
         setLocation(x,y);
         if(button == 1){
-            Block block = new Block(false,new GreenfootImage("magma block.png"));
+            GreenfootImage strip = new GreenfootImage(blank);
+            strip.setColor(Color.BLACK);
+            strip.fill();
+            Block block = new Block(false,strip);
             getWorld().addObject(block, m.getX(), m.getY());
         }
         if(button == 3){

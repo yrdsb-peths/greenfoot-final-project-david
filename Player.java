@@ -11,20 +11,27 @@ public class Player extends ScrollActor
     public static String jump = "up";
     public static String left = "left";
     public static String right = "right";
+    public static String dash = "0";
     // Movement speeds in the x and y directions. Positive is to the right (for x) or down (for y)
     private int vY = 0;
     private int vX = 0;
+    private int speed = 5;
+    private boolean isDashing = false;
     // Gravity: how many cells per frame the player's vertical velocity (vY) increases by every frame
     private int g = 1;
     // The displacement of the player relative to a location
-    private int movedX = 0;
-    private int movedY = 0;
+    public int movedX = 0;
+    public int movedY = 0;
+
+    public static int saveX = 0;
+    public static int saveY = 0;
     // Used to determine whether or not the player can jump/double jump; also aids in setting the jump/double jump animations
     private boolean canJump = true;
     private boolean jumped = false;
     private int platformDY = 0;
     private int markFrame = 0;
     private boolean canHead = true;
+    private int isDashingCDTracker = 0;
     // Direction that the player is facing and frame count (number of times act() is run). Both are used for sprites
     private int dir = 1;
     private int frames = 0;
@@ -38,9 +45,12 @@ public class Player extends ScrollActor
     private GreenfootImage[] jumpS = new GreenfootImage[4];
     private GreenfootImage[] jumpSL = new GreenfootImage[4];
     private GreenfootImage jumpSprite = new GreenfootImage("jump3.png");
-    
+
     private boolean warpedToCheckpoint = false;
-    
+
+    public static boolean paused = false;
+    public static int level = 0;
+
     /**
      * Constructs a player object and sets up the arrays of sprites with proper images
      */
@@ -65,42 +75,63 @@ public class Player extends ScrollActor
             fallL[i].mirrorHorizontally();
         }
     }
-    
+
+    protected void addedToWorld(World world)  
+    {
+        ScrollWorld temp = (ScrollWorld)world;
+        temp.moveCam(saveX,saveY);
+        movedX += saveX;
+        movedY += saveY;
+    }
+
     public void act()
     {
-        if(ground()){
-            vY = 0;
-            platformDY = 0;
-            canJump = true;
-            // movedX and movedY here are only for testing; remove these to use checkpoints effectively
-            // movedX = 0;
-            // movedY = 0;
+        if(!paused){
+            if(ground()){
+                vY = 0;
+                platformDY = 0;
+                canJump = true;
+                // movedX and movedY here are only for testing; remove these to use checkpoints effectively
+                // movedX = 0;
+                // movedY = 0;
+            }
+            if(head() && canHead){
+                vY = 0;
+                canHead = false;
+            }
+            if(!ground() && !isDashing){
+                vY += g;
+            }
+            if(isDashing && vX != 0){
+                vX -= dir*2;
+                vY = 0;
+            }else if(vX == 0){
+                isDashing = false;
+            }
+
+            movement();
+            setDir();
+            getWorld().moveCam(vX,0);
+            checkStuckX();
+            getWorld().moveCam(0,vY);
+            checkStuckY();
+            animate();
+
+            platformDY += Math.abs(vY);
+            movedX += vX;
+            movedY += vY;
+            saveX += vX;
+            saveY += vY;
+            if(!isDashing){
+                vX = 0;
+            }
+            frames++;
+
+            warpToCheckpoint();
+            setCheckpointLocation();
         }
-        if(head() && canHead){
-            vY = 0;
-            canHead = false;
-        }
-        if(!ground()){
-            vY += 1;
-        }
-        
-        movement();
-        setDir();
-        getWorld().moveCam(vX,0);
-        checkStuckX();
-        getWorld().moveCam(0,vY);
-        checkStuckY();
-        animate();
-        
-        platformDY += Math.abs(vY);
-        movedX += vX;
-        movedY += vY;
-        vX = 0;
-        frames++;
-        
-        warpToCheckpoint();
-        setCheckpointLocation();
     }
+
     /** Sets the location to teleport back to */
     public void setCheckpointLocation(){
         if(getOneIntersectingObject(Checkpoint.class) != null){
@@ -109,6 +140,7 @@ public class Player extends ScrollActor
             movedY = 0;
         }
     }
+
     /** Teleports the player back to the location set by SetCheckpointLocation(), default is spawn location */
     public void warpToCheckpoint(){
         if(platformDY >= 44*48-200){
@@ -116,12 +148,15 @@ public class Player extends ScrollActor
             platformDY = 0;
             vY = 0;
             vX = 0;
+            saveX -= movedX;
+            saveY -= movedY;
             movedX = 0;
             movedY = 0;
             warpedToCheckpoint = true;
             checkStuckY();
         }
     }
+
     /** Sets the direction of the sprites to be used */
     public void setDir(){
         if(vX < 0){
@@ -130,27 +165,36 @@ public class Player extends ScrollActor
             dir = 1;
         }
     }
+
     /** To control player movement */
     public void movement(){
-        if(Greenfoot.isKeyDown(left) && !left()){
-            vX -= 5;
+        if(Greenfoot.isKeyDown(left) && !left() && !isDashing){
+            vX -= speed;
         }
-        if(Greenfoot.isKeyDown(right) && !right()){
-            vX += 5;
+        if(Greenfoot.isKeyDown(right) && !right() && !isDashing){
+            vX += speed;
         }
         if(Greenfoot.isKeyDown(jump)&& ground()){
-            vY = -15;
+            vY = -12*g;
             jumped = true;
             canHead = true;
             markFrame = frames;
+            isDashing = false;
         }
         if(!ground() && Greenfoot.isKeyDown(jump) && canJump && (frames - markFrame) >= 7){
-            vY = -15;
+            vY = -12*g;
             canJump = false;
             jumped = true;
             canHead = true;
+            isDashing = false;
+        }
+        if(Greenfoot.isKeyDown(dash) && (frames - isDashingCDTracker) > 35){
+            vX = 22 * dir;
+            isDashing = true;
+            isDashingCDTracker = frames;
         }
     }
+
     /** To animate the player using the appropriate sprites from the arrays set up in the constructor */
     public void animate(){
         if(jumped && canJump){
@@ -194,8 +238,17 @@ public class Player extends ScrollActor
                 setImage(run[runFrame]);
             }
         }
+        if(isDashing){
+            if(dir == -1){
+                GreenfootImage leftisDashing = new GreenfootImage("dash.png");
+                leftisDashing.mirrorHorizontally();
+                setImage(leftisDashing);
+            }else{
+                setImage(new GreenfootImage("dash.png"));
+            }
+        }
     }
-    
+
     /** All of the below use the idle sprite's dimensions for accuracy reasons (the sprite is 38x58) */
     /** Checks whether the player is overlapping with a block in the vertical direction (top/bottom)
      *  If they are, shifts the player up/down appropriately so that they are no longer in the block
@@ -219,6 +272,7 @@ public class Player extends ScrollActor
                 int shiftY = temp.getImage().getHeight()/2+58/2-(blockY-getY());
                 getWorld().moveCam(0, -shiftY);
                 movedY += vY-shiftY;
+                saveY += vY-shiftY;
                 vY = 0;
             }
             warpedToCheckpoint = false;
@@ -241,11 +295,13 @@ public class Player extends ScrollActor
                 int shiftY1 = temp1.getImage().getHeight()/2+58/2-Math.abs(blockY1-getY());
                 getWorld().moveCam(0, shiftY1);
                 movedY += shiftY1;
+                saveY += shiftY1;
                 vY = 0;
             }
             warpedToCheckpoint = false;
         }
     }
+
     /** Checks whether the player overlaps with a block in the x direction (left/right)
      *  If so, the player is shifted left/right appropriately so that they are no longer in the block
      */
@@ -260,6 +316,7 @@ public class Player extends ScrollActor
                 int shiftX = temp.getImage().getWidth()/2+38/2-Math.abs(blockX-getX());
                 getWorld().moveCam(shiftX,0);
                 movedX += shiftX;
+                saveX += shiftX;
             }
         }
         if(checkStuckR() && !checkStuckL() && (vX != 0 || warpedToCheckpoint)){
@@ -272,9 +329,11 @@ public class Player extends ScrollActor
                 int shiftX1 = temp1.getImage().getWidth()/2+38/2-(blockX1-getX());
                 getWorld().moveCam(-shiftX1,0);
                 movedX -= shiftX1;
+                saveX -= shiftX1;
             }
         }
     }
+
     /** Checks whether or not the bottom of the player overlaps with a block */
     public boolean checkStuckB(){
         if(vY < 0){
@@ -288,38 +347,42 @@ public class Player extends ScrollActor
                 getOneObjectAtOffset(38/2-6, 58/2-1, Block.class) != null);
         }
     }
+
     /** Checks whether or not the top of the player overlaps with a block */
     public boolean checkStuckT(){
         if(vY >= 0){
             return false;
         }
         return (((getOneObjectAtOffset(-38/2+6, -58/2+1, Block.class) != null) && 
-                  (getOneObjectAtOffset(-38/2+2, -58/2+1, Block.class) != null)) || 
-                ((getOneObjectAtOffset(38/2-2, -58/2+1, Block.class) != null) && 
-                  (getOneObjectAtOffset(38/2-6, -58/2+1, Block.class) != null)));
+                (getOneObjectAtOffset(-38/2+2, -58/2+1, Block.class) != null)) || 
+            ((getOneObjectAtOffset(38/2-2, -58/2+1, Block.class) != null) && 
+                (getOneObjectAtOffset(38/2-6, -58/2+1, Block.class) != null)));
     }
+
     /** Checks whether or not the left of the player overlaps with a block */
     public boolean checkStuckL(){
         if(dir == 1){
             return (false);
         }else{
             return (((getOneObjectAtOffset(-38/2+3, -58/2, Block.class) != null) && 
-                  (getOneObjectAtOffset(-38/2+3, -58/2+1, Block.class) != null)) || 
+                    (getOneObjectAtOffset(-38/2+3, -58/2+1, Block.class) != null)) || 
                 ((getOneObjectAtOffset(-38/2+3, 58/2, Block.class) != null) && 
-                  (getOneObjectAtOffset(-38/2+3, 58/2-1, Block.class) != null)));
+                    (getOneObjectAtOffset(-38/2+3, 58/2-1, Block.class) != null)));
         }
     }
+
     /** Checks whether or not the right of the player overlaps with a block */
     public boolean checkStuckR(){
         if(dir == 1){
             return (((getOneObjectAtOffset(38/2-3, -58/2, Block.class) != null) && 
-                  (getOneObjectAtOffset(38/2-3, -58/2+1, Block.class) != null)) || 
+                    (getOneObjectAtOffset(38/2-3, -58/2+1, Block.class) != null)) || 
                 ((getOneObjectAtOffset(38/2-3, 58/2-1, Block.class) != null) && 
-                  (getOneObjectAtOffset(38/2-3, 58/2, Block.class) != null)));
+                    (getOneObjectAtOffset(38/2-3, 58/2, Block.class) != null)));
         }else{
             return (false);
         }
     }
+
     /** Checks whether or not the player is standing on a block (includes overlap) */
     public boolean ground(){
         if(dir == 1){
@@ -330,6 +393,7 @@ public class Player extends ScrollActor
                 (getOneObjectAtOffset(38/2-5, 58/2, Block.class) != null));
         }
     }
+
     /** Checks whether or not the player's head is hitting a block (includes overlap) */
     public boolean head(){
         if(dir == 1){
@@ -340,18 +404,20 @@ public class Player extends ScrollActor
                 (getOneObjectAtOffset(38/2-5, -58/2+1, Block.class) != null));
         }
     }
+
     /** Checks whether or not the player's left is touching a block (includes overlap) */
     public boolean left(){
         return (((getOneObjectAtOffset(-38/2+2, -58/2, Block.class) != null) && 
-                  (getOneObjectAtOffset(-38/2+2, -58/2+1, Block.class) != null)) || 
-                ((getOneObjectAtOffset(-38/2+2, 58/2-1, Block.class) != null) && 
-                  (getOneObjectAtOffset(-38/2+2, 58/2, Block.class) != null)));
+                (getOneObjectAtOffset(-38/2+2, -58/2+1, Block.class) != null)) || 
+            ((getOneObjectAtOffset(-38/2+2, 58/2-1, Block.class) != null) && 
+                (getOneObjectAtOffset(-38/2+2, 58/2, Block.class) != null)));
     }
+
     /** Checks whether or not the player's right is touching a block (includes overlap) */
     public boolean right(){
         return (((getOneObjectAtOffset(38/2-2, -58/2, Block.class) != null) && 
-                  (getOneObjectAtOffset(38/2-2, -58/2+1, Block.class) != null)) || 
-                ((getOneObjectAtOffset(38/2-2, 58/2-1, Block.class) != null) && 
-                  (getOneObjectAtOffset(38/2-2, 58/2, Block.class) != null)));
+                (getOneObjectAtOffset(38/2-2, -58/2+1, Block.class) != null)) || 
+            ((getOneObjectAtOffset(38/2-2, 58/2-1, Block.class) != null) && 
+                (getOneObjectAtOffset(38/2-2, 58/2, Block.class) != null)));
     }
 }
