@@ -33,12 +33,12 @@ public class InGameText extends Actor
 
     public void act(){
         if(fade){
-            if(frames%2 == 0 && frames <= 102){
-                color = new Color(color.getRed(),color.getGreen(),color.getBlue(),frames/2*5);
+            if(frames <= 51){
+                color = new Color(color.getRed(),color.getGreen(),color.getBlue(),frames*5);
                 updateImage();
-            }else if(frames%2 == 0 && frames <= 304 && frames >= 202){
+            }else if(frames <= 253 && frames >= 202){
                 image.clear();
-                color = new Color(color.getRed(),color.getGreen(),color.getBlue(),255-(frames-202)/2*5);
+                color = new Color(color.getRed(),color.getGreen(),color.getBlue(),255-(frames-202)*5);
                 updateImage();
             }else if(frames > 304){
                 getWorld().removeObject(this);

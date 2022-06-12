@@ -27,7 +27,7 @@ public class Help extends ScrollWorld
         ground.scale(65,65);
 
         for(int i = 0; i < 4; i++){
-            Block demoGround = new Block(false,ground);
+            Block demoGround = new Block(ground);
             addObject(demoGround, 425+i*65,315);
             allBlocks[i] = demoGround;
         }

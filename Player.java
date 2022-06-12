@@ -15,14 +15,14 @@ public class Player extends ScrollActor
     // Movement speeds in the x and y directions. Positive is to the right (for x) or down (for y)
     private int vY = 0;
     private int vX = 0;
-    private int speed = 5;
+    public static int speed = 5;
     private boolean isDashing = false;
+    private int bounceVY = 0;
     // Gravity: how many cells per frame the player's vertical velocity (vY) increases by every frame
-    private int g = 1;
+    public static double g = 1;
     // The displacement of the player relative to a location
     public int movedX = 0;
     public int movedY = 0;
-
     public static int saveX = 0;
     public static int saveY = 0;
     // Used to determine whether or not the player can jump/double jump; also aids in setting the jump/double jump animations
@@ -46,12 +46,12 @@ public class Player extends ScrollActor
     private GreenfootImage[] jumpSL = new GreenfootImage[4];
     private GreenfootImage jumpSprite = new GreenfootImage("jump3.png");
 
-    private boolean warpedToCheckpoint = false;
+    public static boolean warpedToCheckpoint = false;
 
     public static boolean paused = false;
     public static int level = 0;
     public static boolean help = false;
-    public static Levels[] levels = {new Level1(),new Level2()};
+    public static Levels[] levels = {new Level1(),new Level2(), new Level3()};
 
     /**
      * Constructs a player object and sets up the arrays of sprites with proper images
@@ -116,12 +116,14 @@ public class Player extends ScrollActor
             getWorld().moveCam(vX,0);
             checkStuckX();
             getWorld().moveCam(0,vY);
+            bounceVY = vY;
+            movedY += vY;
+            platformDY += Math.abs(vY);
             checkStuckY();
+            bounce();
             animate();
 
-            platformDY += Math.abs(vY);
             movedX += vX;
-            movedY += vY;
             if(!help){
                 saveX += vX;
                 saveY += vY;
@@ -179,14 +181,14 @@ public class Player extends ScrollActor
             vX += speed;
         }
         if(Greenfoot.isKeyDown(jump)&& ground()){
-            vY = -12*g;
+            vY = -12;
             jumped = true;
             canHead = true;
             markFrame = frames;
             isDashing = false;
         }
         if(!ground() && Greenfoot.isKeyDown(jump) && canJump && (frames - markFrame) >= 8){
-            vY = -12*g;
+            vY = -12;
             canJump = false;
             jumped = true;
             canHead = true;
@@ -234,7 +236,7 @@ public class Player extends ScrollActor
                 setImage(idle[idleFrame]);
             }
         }
-        if(ground() && vX != 0){
+        if(ground() && (vX != 0 || Greenfoot.isKeyDown(left) || Greenfoot.isKeyDown(right))){
             int runFrame = frames%24/4;
             if(dir == -1){
                 setImage(runL[runFrame]);
@@ -275,9 +277,9 @@ public class Player extends ScrollActor
                 int blockY = temp.getY();
                 int shiftY = temp.getImage().getHeight()/2+58/2-(blockY-getY());
                 getWorld().moveCam(0, -shiftY);
-                movedY += vY-shiftY;
+                movedY += -shiftY;
                 if(!help){
-                    saveY += vY-shiftY;
+                    saveY += -shiftY;
                 }
                 vY = 0;
             }
@@ -312,7 +314,7 @@ public class Player extends ScrollActor
      *  If so, the player is shifted left/right appropriately so that they are no longer in the block
      */
     public void checkStuckX(){
-        if(checkStuckL() && !checkStuckR() && (vX != 0 || warpedToCheckpoint)){
+        if(checkStuckL() && !checkStuckR()){
             Block temp = (Block) getOneObjectAtOffset(-38/2+3, 58/2-1, Block.class);
             if(temp == null){
                 temp = (Block) getOneObjectAtOffset(-38/2+3, -58/2+1, Block.class);
@@ -325,7 +327,7 @@ public class Player extends ScrollActor
                 saveX += shiftX;
             }
         }
-        if(checkStuckR() && !checkStuckL() && (vX != 0 || warpedToCheckpoint)){
+        if(checkStuckR() && !checkStuckL()){
             Block temp1 = (Block) getOneObjectAtOffset(38/2-3, 58/2-1, Block.class);
             if(temp1 == null){
                 temp1 = (Block) getOneObjectAtOffset(38/2-3, -58/2+1, Block.class);
@@ -373,17 +375,19 @@ public class Player extends ScrollActor
             return (((getOneObjectAtOffset(-38/2+3, -58/2, Block.class) != null) && 
                     (getOneObjectAtOffset(-38/2+3, -58/2+1, Block.class) != null)) || 
                 ((getOneObjectAtOffset(-38/2+3, 58/2, Block.class) != null) && 
-                    (getOneObjectAtOffset(-38/2+3, 58/2-1, Block.class) != null)));
+                    (getOneObjectAtOffset(-38/2+3, 58/2-1, Block.class) != null)) || 
+                (getOneObjectAtOffset(-38/2+3,0,Block.class) != null));
         }
     }
 
     /** Checks whether or not the right of the player overlaps with a block */
     public boolean checkStuckR(){
         if(dir == 1){
-            return (((getOneObjectAtOffset(38/2-3, -58/2, Block.class) != null) && 
-                    (getOneObjectAtOffset(38/2-3, -58/2+1, Block.class) != null)) || 
-                ((getOneObjectAtOffset(38/2-3, 58/2-1, Block.class) != null) && 
-                    (getOneObjectAtOffset(38/2-3, 58/2, Block.class) != null)));
+            return (((getOneObjectAtOffset(38/2-2, -58/2, Block.class) != null) && 
+                    (getOneObjectAtOffset(38/2-2, -58/2+1, Block.class) != null)) || 
+                ((getOneObjectAtOffset(38/2-2, 58/2-1, Block.class) != null) && 
+                    (getOneObjectAtOffset(38/2-2, 58/2, Block.class) != null)) ||
+                (getOneObjectAtOffset(38/2-2, 0, Block.class) != null));
         }else{
             return (false);
         }
@@ -407,23 +411,46 @@ public class Player extends ScrollActor
                 (getOneObjectAtOffset(38/2-3, -58/2+1, Block.class) != null));
         }else{
             return (getOneObjectAtOffset(-38/2+3, -58/2+1, Block.class) != null || 
-                (getOneObjectAtOffset(38/2-5, -58/2+1, Block.class) != null));
+                (getOneObjectAtOffset(38/2-3, -58/2+1, Block.class) != null));
         }
     }
 
     /** Checks whether or not the player's left is touching a block (includes overlap) */
     public boolean left(){
-        return (((getOneObjectAtOffset(-38/2+2, -58/2, Block.class) != null) && 
-                (getOneObjectAtOffset(-38/2+2, -58/2+1, Block.class) != null)) || 
-            ((getOneObjectAtOffset(-38/2+2, 58/2-1, Block.class) != null) && 
-                (getOneObjectAtOffset(-38/2+2, 58/2, Block.class) != null)));
+        return (((getOneObjectAtOffset(-38/2+1, -58/2, Block.class) != null) && 
+                (getOneObjectAtOffset(-38/2+1, -58/2+1, Block.class) != null)) || 
+            ((getOneObjectAtOffset(-38/2+1, 58/2-1, Block.class) != null) && 
+                (getOneObjectAtOffset(-38/2+1, 58/2, Block.class) != null)) ||
+            (getOneObjectAtOffset(-38/2+1,0,Block.class) != null));
     }
 
     /** Checks whether or not the player's right is touching a block (includes overlap) */
     public boolean right(){
-        return (((getOneObjectAtOffset(38/2-2, -58/2, Block.class) != null) && 
-                (getOneObjectAtOffset(38/2-2, -58/2+1, Block.class) != null)) || 
-            ((getOneObjectAtOffset(38/2-2, 58/2-1, Block.class) != null) && 
-                (getOneObjectAtOffset(38/2-2, 58/2, Block.class) != null)));
+        return (((getOneObjectAtOffset(38/2, -58/2, Block.class) != null) && 
+                (getOneObjectAtOffset(38/2, -58/2+1, Block.class) != null)) || 
+            ((getOneObjectAtOffset(38/2, 58/2-1, Block.class) != null) && 
+                (getOneObjectAtOffset(38/2, 58/2, Block.class) != null)) ||
+            (getOneObjectAtOffset(38/2,0,Block.class) != null));
+    }
+    
+    public void bounce(){
+        if((getOneObjectAtOffset(-38/2+5, 58/2, SlimeBlock.class) != null) ||
+            (getOneObjectAtOffset(38/2-3, 58/2, SlimeBlock.class) != null) || 
+            (getOneObjectAtOffset(-38/2+3, 58/2, SlimeBlock.class) != null) ||
+            (getOneObjectAtOffset(38/2-5, 58/2, SlimeBlock.class) != null)){
+            bounceVY = bounceVY*-6/5;
+            getWorld().moveCam(0,bounceVY);
+            movedY += bounceVY;
+            saveY += bounceVY;
+            canJump = true;
+            jumped = false;
+            getWorld().repaint();
+            vY = bounceVY;
+            platformDY = 0;
+        }
+    }
+    
+    public Checkpoint getCheckpoint(){
+        return (Checkpoint)getOneIntersectingObject(Checkpoint.class);
     }
 }

@@ -8,7 +8,7 @@ public class Level1 extends Levels
     private Decor[] darknessScroll = new Decor[2];
     public Decor exit;
     public Player player;
-    InGameText title;
+    private InGameText title;
 
     /**
      * Constructor for objects of class DemoWorld.
@@ -74,7 +74,7 @@ public class Level1 extends Levels
             addGrass(2400+48*i,300);
         }
 
-        addObject(new Gate(new GreenfootImage("gate.png")),2750,197);
+        addObject(new Gate(new GreenfootImage("gate1.png")),2750,197);
 
         addHouse();
 
@@ -83,6 +83,7 @@ public class Level1 extends Levels
         title = new InGameText("SETTING OFF",Color.WHITE,new Font("Constantia",true,false,40),true);
         addObject(title,520,80);
         
+        addObject(new Block(new GreenfootImage(50,1000)),2825,225);
     }
 
     public void act(){
@@ -107,9 +108,9 @@ public class Level1 extends Levels
     }
 
     private void addGrass(int x, int y){
-        Block grassBlock = new Block(false,grass);
+        Block grassBlock = new Block(grass);
         addObject(grassBlock,x,y);
-        Block dirtBlock = new Block(false,dirt1);
+        Block dirtBlock = new Block(dirt1);
         addObject(dirtBlock,x,y+48*22);
     }
 

@@ -18,9 +18,4 @@ public class Checkpoint extends ScrollActor
         image.scale(48,58);
         setImage(image);
     }
-    
-    public void act()
-    {
-        // Add your action code here.
-    }
 }

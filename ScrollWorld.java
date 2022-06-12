@@ -48,7 +48,7 @@ public abstract class ScrollWorld extends World
         if(inverted){
             bigBackground = new GreenfootImage(width*3,height*2);
         }else{
-            bigBackground = new GreenfootImage(width*2, height*3);
+            bigBackground = new GreenfootImage(width*2, height*2);
         }
         setNewBackground(back);
     }
@@ -172,35 +172,4 @@ public abstract class ScrollWorld extends World
         TransitionAssist temp = new TransitionAssist(world);
         addObject(temp,width/2,height/2);
     }
-
-    public void createSpawnPlatform(GreenfootImage image, GreenfootImage toDraw){
-        for(int n = 0; n < 48; n++){
-            for(int m = 0; m < 48; m++){
-                image.setColorAt(m,n,new Color((int)(image.getColorAt(m,n).getRed()*Math.pow(199,n)/Math.pow(200,n)),
-                        (int)(image.getColorAt(m,n).getGreen()*Math.pow(199,n)/Math.pow(200,n)),
-                        (int)(image.getColorAt(m,n).getBlue()*Math.pow(199,n)/Math.pow(200,n))));
-            }
-        }
-        for(int i = 0; i < 42; i++){
-            for(int n = 0; n < 48; n++){
-                for(int m = 0; m < 48; m++){
-                    if(i != 0){
-                        image.setColorAt(n,m,new Color((int)(image.getColorAt(n,m).getRed()*Math.pow(199,48)/Math.pow(200,48)),
-                                (int)(image.getColorAt(n,m).getGreen()*Math.pow(199,48)/Math.pow(200,48)),
-                                (int)(image.getColorAt(n,m).getBlue()*Math.pow(199,48)/Math.pow(200,48))));
-                    }
-                }
-            }
-            toDraw.drawImage(image,0,i*48);
-        }
-        GreenfootImage empty = new GreenfootImage(50,1000);
-        for(int i = 0; i < 2; i++){
-            Block barrier = new Block(false,empty);
-            addObject(barrier,125+i*2700,225);
-        }
-    }
-
-    
-    
-    
 }
