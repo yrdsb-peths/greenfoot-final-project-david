@@ -90,7 +90,7 @@ public class Level2 extends Levels
         arrow.setRotation(270);
         addStone(1200,300);
         addObject(new Checkpoint(),1200,300);
-        addObject(new Gate(new GreenfootImage("gate2.png")),3750,243);
+        addObject(new Gate(new GreenfootImage("gate3.png")),3750,200);
         
         title = new InGameText("CRUMBLING CAVE",Color.WHITE,new Font("Constantia",true,false,40),true);
         addObject(title,550,80);

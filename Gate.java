@@ -32,7 +32,6 @@ public class Gate extends ScrollActor
             Player.level++;
             Player.saveX = 0;
             Player.saveY = 0;
-            Player.g = 1;
             Levels nextLvl = Player.levels[Player.level];
             getWorld().changeWorld(nextLvl);
             enterCount++;

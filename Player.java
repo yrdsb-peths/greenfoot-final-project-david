@@ -26,7 +26,7 @@ public class Player extends ScrollActor
     public static int saveX = 0;
     public static int saveY = 0;
     // Used to determine whether or not the player can jump/double jump; also aids in setting the jump/double jump animations
-    private boolean canJump = true;
+    public static boolean canJump = true;
     private boolean jumped = false;
     private int platformDY = 0;
     private int markFrame = 0;
@@ -51,7 +51,7 @@ public class Player extends ScrollActor
     public static boolean paused = false;
     public static int level = 0;
     public static boolean help = false;
-    public static Levels[] levels = {new Level1(),new Level2(), new Level3()};
+    public static Levels[] levels = {new Level1(),new Level2(), new Level3(),new Level4(), new Level5()};
 
     /**
      * Constructs a player object and sets up the arrays of sprites with proper images
@@ -88,7 +88,19 @@ public class Player extends ScrollActor
 
     public void act()
     {
+        setGravity();
         if(!paused){
+            if(touchingIce()){
+                speed = 7;
+            }else if(getWorld() == levels[2]){
+                speed = 4;
+            }else{
+                speed = 5;
+            }
+            if(getWorld() == levels[3]){
+                canJump = false;
+                isDashingCDTracker = frames;
+            }
             if(ground()){
                 vY = 0;
                 platformDY = 0;
@@ -128,13 +140,24 @@ public class Player extends ScrollActor
                 saveX += vX;
                 saveY += vY;
             }
-            if(!isDashing){
+            if(!isDashing && !touchingIce()){
                 vX = 0;
+            }
+            if(touchingIce() && vX != 0 && !(Greenfoot.isKeyDown(left) || Greenfoot.isKeyDown(right)) && frames%4 == 0 && !isDashing){
+                vX -= dir;
             }
             frames++;
 
             warpToCheckpoint();
             setCheckpointLocation();
+        }
+    }
+    
+    public void setGravity(){
+        if(getWorld() == levels[4]){
+            g = 1.1;
+        }else{
+            g = 1;
         }
     }
 
@@ -175,10 +198,10 @@ public class Player extends ScrollActor
     /** To control player movement */
     public void movement(){
         if(Greenfoot.isKeyDown(left) && !left() && !isDashing){
-            vX -= speed;
+            vX = -speed;
         }
         if(Greenfoot.isKeyDown(right) && !right() && !isDashing){
-            vX += speed;
+            vX = speed;
         }
         if(Greenfoot.isKeyDown(jump)&& ground()){
             vY = -12;
@@ -195,7 +218,7 @@ public class Player extends ScrollActor
             isDashing = false;
         }
         if(Greenfoot.isKeyDown(dash) && (frames - isDashingCDTracker) > 35){
-            vX = 22 * dir;
+            vX = (speed*4+2) * dir;
             isDashing = true;
             isDashingCDTracker = frames;
         }
@@ -438,7 +461,7 @@ public class Player extends ScrollActor
             (getOneObjectAtOffset(38/2-3, 58/2, SlimeBlock.class) != null) || 
             (getOneObjectAtOffset(-38/2+3, 58/2, SlimeBlock.class) != null) ||
             (getOneObjectAtOffset(38/2-5, 58/2, SlimeBlock.class) != null)){
-            bounceVY = bounceVY*-6/5;
+            bounceVY = bounceVY*-9/10;
             getWorld().moveCam(0,bounceVY);
             movedY += bounceVY;
             saveY += bounceVY;
@@ -448,6 +471,13 @@ public class Player extends ScrollActor
             vY = bounceVY;
             platformDY = 0;
         }
+    }
+    
+    public boolean touchingIce(){
+        return((getOneObjectAtOffset(-38/2+5, 58/2, IceBlock.class) != null) ||
+            (getOneObjectAtOffset(38/2-3, 58/2, IceBlock.class) != null) || 
+            (getOneObjectAtOffset(-38/2+3, 58/2, IceBlock.class) != null) ||
+            (getOneObjectAtOffset(38/2-5, 58/2, IceBlock.class) != null));
     }
     
     public Checkpoint getCheckpoint(){

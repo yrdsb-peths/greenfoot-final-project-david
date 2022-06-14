@@ -1,0 +1,6 @@
+#BlueJ class context
+comment0.target=MovingBlock
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ MovingBlock\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=image\ maxDist\ tracker\ speed\ moveX
+comment1.target=MovingBlock(greenfoot.GreenfootImage,\ int,\ Decor,\ int,\ boolean)
+numComments=2

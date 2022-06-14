@@ -21,10 +21,10 @@ public abstract class Levels extends ScrollWorld
     public Levels(int width, int height, int cellSize, boolean inverted)
     {
         super(width,height,cellSize,inverted);
-        addPauseButton();
+        createPauseButton();
     }
 
-    public void addPauseButton(){
+    public void createPauseButton(){
         Font constantia = new Font("Constantia",true,false,30);
 
         GreenfootImage backButton = new GreenfootImage("orangeButton.png");
@@ -87,24 +87,25 @@ public abstract class Levels extends ScrollWorld
     }
 
     public void createSpawnPlatform(GreenfootImage image, GreenfootImage toDraw){
+        GreenfootImage tempImage = new GreenfootImage(image);
         for(int n = 0; n < 48; n++){
             for(int m = 0; m < 48; m++){
-                image.setColorAt(m,n,new Color((int)(image.getColorAt(m,n).getRed()*Math.pow(199,n)/Math.pow(200,n)),
-                        (int)(image.getColorAt(m,n).getGreen()*Math.pow(199,n)/Math.pow(200,n)),
-                        (int)(image.getColorAt(m,n).getBlue()*Math.pow(199,n)/Math.pow(200,n))));
+                tempImage.setColorAt(m,n,new Color((int)(tempImage.getColorAt(m,n).getRed()*Math.pow(199,n)/Math.pow(200,n)),
+                        (int)(tempImage.getColorAt(m,n).getGreen()*Math.pow(199,n)/Math.pow(200,n)),
+                        (int)(tempImage.getColorAt(m,n).getBlue()*Math.pow(199,n)/Math.pow(200,n))));
             }
         }
         for(int i = 0; i < 42; i++){
             for(int n = 0; n < 48; n++){
                 for(int m = 0; m < 48; m++){
                     if(i != 0){
-                        image.setColorAt(n,m,new Color((int)(image.getColorAt(n,m).getRed()*Math.pow(199,48)/Math.pow(200,48)),
-                                (int)(image.getColorAt(n,m).getGreen()*Math.pow(199,48)/Math.pow(200,48)),
-                                (int)(image.getColorAt(n,m).getBlue()*Math.pow(199,48)/Math.pow(200,48))));
+                        tempImage.setColorAt(n,m,new Color((int)(tempImage.getColorAt(n,m).getRed()*Math.pow(199,48)/Math.pow(200,48)),
+                                (int)(tempImage.getColorAt(n,m).getGreen()*Math.pow(199,48)/Math.pow(200,48)),
+                                (int)(tempImage.getColorAt(n,m).getBlue()*Math.pow(199,48)/Math.pow(200,48))));
                     }
                 }
             }
-            toDraw.drawImage(image,0,i*48);
+            toDraw.drawImage(tempImage,0,i*48);
         }
         addObject(new Block(new GreenfootImage(50,1000)),125,225);
     }

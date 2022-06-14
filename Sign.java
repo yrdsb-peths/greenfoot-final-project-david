@@ -38,7 +38,7 @@ public class Sign extends Decor
     public void act()
     {
         if(getOneIntersectingObject(Player.class) != null){
-            getWorld().addObject(text,720,330);
+            getWorld().addObject(text,670,330);
         }else{
             getWorld().removeObject(text);
         }

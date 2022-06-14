@@ -1,15 +1,19 @@
 #BlueJ class context
 comment0.target=Level3
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ Level3\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ Level4\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
 comment1.params=
 comment1.target=Level3()
-comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ Level3.\r\n\ \r\n
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ Level4.\r\n\ \r\n
 comment2.params=
 comment2.target=void\ act()
 comment3.params=
 comment3.target=void\ construct()
-comment4.params=strip
-comment4.target=void\ createSpawnPlatform(greenfoot.GreenfootImage)
+comment4.params=x\ y
+comment4.target=void\ addMoss(int,\ int)
 comment5.params=x\ y
-comment5.target=void\ addStone(int,\ int)
-numComments=6
+comment5.target=void\ addMossStrip(int,\ int)
+comment6.params=x\ y
+comment6.target=void\ addSlime(int,\ int)
+comment7.params=x\ y
+comment7.target=void\ addWall(int,\ int)
+numComments=8
