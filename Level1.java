@@ -6,7 +6,6 @@ public class Level1 extends Levels
     private GreenfootImage dirt1 = new GreenfootImage(48,48*43);
     private Decor[] skyScroll = new Decor[2];
     private Decor[] darknessScroll = new Decor[2];
-    public Decor exit;
     public Player player;
     private InGameText title;
 
@@ -15,7 +14,7 @@ public class Level1 extends Levels
      */
     public Level1()
     {
-        super(711, 400, 1,false);
+        super(711, 400, 1,false,0);
         prepare();
         player = new Player();
         addCameraFollower(player, 0, 75);
@@ -32,7 +31,7 @@ public class Level1 extends Levels
         addSky();
         grass.scale(48,48);
         dirt.scale(48,48);
-        createSpawnPlatform(dirt,dirt1);
+        createSpawnPlatform(dirt,dirt1,false);
         
         GreenfootImage sign = new GreenfootImage("arrow sign.png");
         sign.mirrorHorizontally();

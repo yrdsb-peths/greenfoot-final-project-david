@@ -6,4 +6,6 @@ comment1.target=TransitionAssist(greenfoot.World)
 comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ TransitionAssist\r\n
 comment2.params=
 comment2.target=void\ act()
-numComments=3
+comment3.params=
+comment3.target=int\ checkWorld()
+numComments=4

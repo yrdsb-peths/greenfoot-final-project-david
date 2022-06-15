@@ -14,13 +14,17 @@ public abstract class Levels extends ScrollWorld
     public Decor panel;
     public PauseButton pause;
     public Decor exit;
+    public BreakingBlock[] breakingBlock;
+    public LocationTracker[] trackers;
     /**
      * Constructor for objects of class Levels.
      * 
      */
-    public Levels(int width, int height, int cellSize, boolean inverted)
+    public Levels(int width, int height, int cellSize, boolean inverted, int numBreakingBlocks)
     {
         super(width,height,cellSize,inverted);
+        breakingBlock = new BreakingBlock[numBreakingBlocks];
+        trackers = new LocationTracker[numBreakingBlocks];
         createPauseButton();
     }
 
@@ -86,7 +90,7 @@ public abstract class Levels extends ScrollWorld
         removeObject(exit);
     }
 
-    public void createSpawnPlatform(GreenfootImage image, GreenfootImage toDraw){
+    public void createSpawnPlatform(GreenfootImage image, GreenfootImage toDraw,boolean isLastLevel){
         GreenfootImage tempImage = new GreenfootImage(image);
         for(int n = 0; n < 48; n++){
             for(int m = 0; m < 48; m++){
@@ -107,13 +111,41 @@ public abstract class Levels extends ScrollWorld
             }
             toDraw.drawImage(tempImage,0,i*48);
         }
-        addObject(new Block(new GreenfootImage(50,1000)),125,225);
+        if(!isLastLevel){
+            addObject(new Block(new GreenfootImage(50,1000)),125,225);
+        }else{
+            addObject(new Block(new GreenfootImage(50,1000)),711-125,225);
+        }
     }
-    
+
     public void addBreakingBlock(BreakingBlock block,LocationTracker tracker,int x,int y){
         addObject(block,x,y);
         addObject(tracker,x,y);
         block.x = x;
         block.y = y;
+    }
+
+    public void resetBreakingBlocks(){
+        for(int i = 0; i < breakingBlock.length; i++){
+            BreakingBlock block = breakingBlock[i];
+            if(block.removed && Player.warpedToCheckpoint){
+                addObject(block,trackers[i].getX(),trackers[i].getY());
+                block.removed = false;
+            }
+            if(Player.warpedToCheckpoint){
+                block.reset();
+            }
+        }
+    }
+
+    public void setupBreakingBlocks(GreenfootImage image,int duration){
+        if(breakingBlock.length != 0){
+            for(int i = 0; i < breakingBlock.length; i++){
+                BreakingBlock cobblestone = new BreakingBlock(image,duration);
+                breakingBlock[i] = cobblestone;
+                LocationTracker tracker = new LocationTracker();
+                trackers[i] = tracker;
+            }
+        }
     }
 }

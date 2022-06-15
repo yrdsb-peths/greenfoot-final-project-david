@@ -14,8 +14,6 @@ public class Level2 extends Levels
     private Decor[] darknessScroll = new Decor[2];
     private Decor[] ceilingScroll = new Decor[2];
     public Player player;
-    private BreakingBlock[] breakingBlock = new BreakingBlock[14];
-    private LocationTracker[] trackers = new LocationTracker[14];
     private InGameText title;
     /**
      * Constructor for objects of class Level2.
@@ -24,7 +22,7 @@ public class Level2 extends Levels
 
     public Level2()
     {
-        super(711,400,1,false);
+        super(711,400,1,false,14);
         stone.scale(48,48);
         darkness.setColor(Color.BLACK);
         darkness.fill();
@@ -44,7 +42,7 @@ public class Level2 extends Levels
             darknessScroll[i] = black;
             addObject(black,-716/2+716*i,getHeight()/2+48*25-10);
         }
-        createSpawnPlatform(stone,stone1);
+        createSpawnPlatform(stone,stone1,false);
         for(int i = 0; i < 16; i++){
             addStone(-48*4+48*i,287);
         }
@@ -58,12 +56,7 @@ public class Level2 extends Levels
         }
         GreenfootImage cobble = new GreenfootImage("cobblestone.png");
         cobble.scale(48,48);
-        for(int i = 0; i < 14; i++){
-            BreakingBlock cobblestone = new BreakingBlock(cobble,2);
-            breakingBlock[i] = cobblestone;
-            LocationTracker tracker = new LocationTracker();
-            trackers[i] = tracker;
-        }
+        setupBreakingBlocks(cobble,2);
         addBreakingBlock(breakingBlock[0],trackers[0],600,300);
         addBreakingBlock(breakingBlock[1],trackers[1],755,350);
         addBreakingBlock(breakingBlock[2],trackers[2],850,350);
@@ -122,12 +115,6 @@ public class Level2 extends Levels
             }
             if(Player.warpedToCheckpoint){
                 block.reset();
-            }
-        }
-        if(player.getCheckpoint() != null){
-            for(int i = 0; i < 12; i++){
-                breakingBlock[i].x = trackers[i].getX()-(player.getCheckpoint().getX()-getWidth()/2);
-                breakingBlock[i].y = trackers[i].getY();
             }
         }
         clickedPauseButton();

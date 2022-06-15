@@ -16,6 +16,7 @@ public class Player extends ScrollActor
     private int vY = 0;
     private int vX = 0;
     public static int speed = 5;
+    private int jumpVelocity = -12;
     private boolean isDashing = false;
     private int bounceVY = 0;
     // Gravity: how many cells per frame the player's vertical velocity (vY) increases by every frame
@@ -51,7 +52,8 @@ public class Player extends ScrollActor
     public static boolean paused = false;
     public static int level = 0;
     public static boolean help = false;
-    public static Levels[] levels = {new Level1(),new Level2(), new Level3(),new Level4(), new Level5()};
+    public static Levels[] levels = {new Level1(),new Level2(), new Level3(),new Level4(), new Level5(), new Level6()};
+    private static boolean startedTimer = false;
 
     /**
      * Constructs a player object and sets up the arrays of sprites with proper images
@@ -94,20 +96,24 @@ public class Player extends ScrollActor
                 speed = 7;
             }else if(getWorld() == levels[2]){
                 speed = 4;
+            }else if(getWorld() == levels[5]){
+                speed = 3;
             }else{
                 speed = 5;
             }
             if(getWorld() == levels[3]){
                 canJump = false;
+            }
+            if(touchingIce()){
                 isDashingCDTracker = frames;
             }
             if(ground()){
                 vY = 0;
                 platformDY = 0;
-                canJump = true;
-                // movedX and movedY here are only for testing; remove these to use checkpoints effectively
-                // movedX = 0;
-                // movedY = 0;
+                markFrame = frames;
+                if(!touchingIce()){
+                    canJump = true;
+                }
             }
             if(head() && canHead){
                 vY = 0;
@@ -152,7 +158,7 @@ public class Player extends ScrollActor
             setCheckpointLocation();
         }
     }
-    
+
     public void setGravity(){
         if(getWorld() == levels[4]){
             g = 1.1;
@@ -166,7 +172,7 @@ public class Player extends ScrollActor
         if(getOneIntersectingObject(Checkpoint.class) != null){
             Checkpoint checkpoint = (Checkpoint) getOneIntersectingObject(Checkpoint.class);
             movedX = getX() - checkpoint.getX();
-            movedY = 0;
+            movedY = getY() - checkpoint.getY();
         }
     }
 
@@ -182,12 +188,22 @@ public class Player extends ScrollActor
             movedX = 0;
             movedY = 0;
             warpedToCheckpoint = true;
+            if(((Levels)getWorld()).breakingBlock.length != 0){
+                ((Levels)getWorld()).resetBreakingBlocks();
+            }
             checkStuckY();
+            Stats.deaths++;
         }
     }
 
     /** Sets the direction of the sprites to be used */
     public void setDir(){
+        if(Greenfoot.isKeyDown(left)){
+            dir = -1;
+        }
+        if(Greenfoot.isKeyDown(right)){
+            dir = 1;
+        }
         if(vX < 0){
             dir = -1;
         }else if(vX > 0){
@@ -204,18 +220,23 @@ public class Player extends ScrollActor
             vX = speed;
         }
         if(Greenfoot.isKeyDown(jump)&& ground()){
-            vY = -12;
+            vY = jumpVelocity;
             jumped = true;
             canHead = true;
             markFrame = frames;
             isDashing = false;
+            if(touchingIce()){
+                canJump = false;
+            }
+            Stats.jumps++;
         }
-        if(!ground() && Greenfoot.isKeyDown(jump) && canJump && (frames - markFrame) >= 8){
-            vY = -12;
+        if(!ground() && Greenfoot.isKeyDown(jump) && canJump && (frames - markFrame) >= 9){
+            vY = jumpVelocity;
             canJump = false;
             jumped = true;
             canHead = true;
             isDashing = false;
+            Stats.jumps++;
         }
         if(Greenfoot.isKeyDown(dash) && (frames - isDashingCDTracker) > 35){
             vX = (speed*4+2) * dir;
@@ -342,6 +363,9 @@ public class Player extends ScrollActor
             if(temp == null){
                 temp = (Block) getOneObjectAtOffset(-38/2+3, -58/2+1, Block.class);
             }
+            if(temp == null){
+                temp = (Block) getOneObjectAtOffset(-38/2+3,0,Block.class);
+            }
             if(temp != null){
                 int blockX = temp.getX();
                 int shiftX = temp.getImage().getWidth()/2+38/2-Math.abs(blockX-getX());
@@ -354,6 +378,9 @@ public class Player extends ScrollActor
             Block temp1 = (Block) getOneObjectAtOffset(38/2-3, 58/2-1, Block.class);
             if(temp1 == null){
                 temp1 = (Block) getOneObjectAtOffset(38/2-3, -58/2+1, Block.class);
+            }
+            if(temp1 == null){
+                temp1 = (Block) getOneObjectAtOffset(38/2-3,0,Block.class);
             }
             if(temp1 != null){
                 int blockX1 = temp1.getX();
@@ -455,12 +482,12 @@ public class Player extends ScrollActor
                 (getOneObjectAtOffset(38/2, 58/2, Block.class) != null)) ||
             (getOneObjectAtOffset(38/2,0,Block.class) != null));
     }
-    
+
     public void bounce(){
         if((getOneObjectAtOffset(-38/2+5, 58/2, SlimeBlock.class) != null) ||
-            (getOneObjectAtOffset(38/2-3, 58/2, SlimeBlock.class) != null) || 
-            (getOneObjectAtOffset(-38/2+3, 58/2, SlimeBlock.class) != null) ||
-            (getOneObjectAtOffset(38/2-5, 58/2, SlimeBlock.class) != null)){
+        (getOneObjectAtOffset(38/2-3, 58/2, SlimeBlock.class) != null) || 
+        (getOneObjectAtOffset(-38/2+3, 58/2, SlimeBlock.class) != null) ||
+        (getOneObjectAtOffset(38/2-5, 58/2, SlimeBlock.class) != null)){
             bounceVY = bounceVY*-9/10;
             getWorld().moveCam(0,bounceVY);
             movedY += bounceVY;
@@ -472,15 +499,19 @@ public class Player extends ScrollActor
             platformDY = 0;
         }
     }
-    
+
     public boolean touchingIce(){
         return((getOneObjectAtOffset(-38/2+5, 58/2, IceBlock.class) != null) ||
             (getOneObjectAtOffset(38/2-3, 58/2, IceBlock.class) != null) || 
             (getOneObjectAtOffset(-38/2+3, 58/2, IceBlock.class) != null) ||
             (getOneObjectAtOffset(38/2-5, 58/2, IceBlock.class) != null));
     }
-    
+
     public Checkpoint getCheckpoint(){
         return (Checkpoint)getOneIntersectingObject(Checkpoint.class);
+    }
+
+    public void setWorld(int level){
+        getWorld().changeWorld(levels[level]);
     }
 }

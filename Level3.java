@@ -24,7 +24,7 @@ public class Level3 extends Levels
 
     public Level3()
     {
-        super(711,400,1,false);
+        super(711,400,1,false,0);
         construct();
         Player.speed = 4;
         player = new Player();
@@ -67,7 +67,7 @@ public class Level3 extends Levels
         addObject(warning,540,300);
         mossBlock.scale(48,48);
         mossStone.scale(48,48);
-        createSpawnPlatform(mossBlock,mossStrip);
+        createSpawnPlatform(mossBlock,mossStrip,false);
         for(int i = 0; i < 16;i++){
             addMossStrip(-48*4+48*i,287);
         }
@@ -100,7 +100,7 @@ public class Level3 extends Levels
             addMossStrip(3900+i*48,252);
         }
         addObject(new Block(new GreenfootImage(50,1000)),4325,300);
-        addObject(new Gate(new GreenfootImage("gate4.png")),4250,161);
+        addObject(new Gate(new GreenfootImage("gate5.png")),4250,167);
         title = new InGameText("FUNGAL FOREST",Color.WHITE,new Font("Constantia",true,false,40),true);
         addObject(title,535,80);
     }

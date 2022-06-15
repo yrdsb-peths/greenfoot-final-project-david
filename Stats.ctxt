@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=Stats
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ Stats\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=start
+comment1.target=Stats(boolean)
+comment2.params=
+comment2.target=void\ startTimer()
+comment3.params=
+comment3.target=void\ endTimer()
+numComments=4

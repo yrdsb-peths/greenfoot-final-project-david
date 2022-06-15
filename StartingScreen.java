@@ -22,6 +22,7 @@ public class StartingScreen extends ScrollWorld
     Label settings;
     Label story;
     Label title;
+    private static int startingWorldCount = 0;
     /**
      * Constructor for objects of class StartingScreen.
      * 
@@ -51,8 +52,8 @@ public class StartingScreen extends ScrollWorld
         addObject(help,175,300);
         addCameraFollower(new Scroller(),0,0);
         Player player = new Player();
-        
         Player.help = false;
+        startingWorldCount++;
     }
 
     public void act(){
@@ -76,6 +77,9 @@ public class StartingScreen extends ScrollWorld
         }
         if(currentStep == totalColorChangeSteps*2){
             currentStep = 0;
+        }
+        if(startingWorldCount == 1){
+            ScrollWorld.music[0].playLoop();
         }
         currentStep++;
     }

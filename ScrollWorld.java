@@ -23,6 +23,12 @@ public abstract class ScrollWorld extends World
     private int scrollPosX, scrollPosY; // For scrolling the background
 
     public static int volume = 50;
+    public static GreenfootSound[] music = {new GreenfootSound("Start.mp3"),new GreenfootSound("Story.mp3"),
+                                            new GreenfootSound("Settings.mp3"),new GreenfootSound("Help.mp3"),
+                                            new GreenfootSound("Level1.mp3"),new GreenfootSound("Level2.mp3"),
+                                            new GreenfootSound("Level3.mp3"),new GreenfootSound("Level4.mp3"),
+                                            new GreenfootSound("Level5.mp3"),new GreenfootSound("Level6.mp3"),
+                                            new GreenfootSound("Ending.mp3")};
 
     /** Sets up a ScrollWorld. */
     public ScrollWorld(int width, int height, int cellSize, boolean inverted)

@@ -26,15 +26,10 @@ public class Story extends ScrollWorld
         addCameraFollower(back,70-getWidth()/2,22-getHeight()/2);
         
         addCameraFollower(new Scroller(),getWidth()/2,getHeight()/2);
-        description = new Label("You are a traveller setting off on a journey.\n" + 
-                                "You will journey through many biomes and endure\n" + 
-                                "many hardships.\n" + 
-                                "At the end of it all, you will see great wonders.\n" + 
+        description = new Label("You are a traveller setting off on a\n" + 
+                                "Journey. You will journey through many\n" + 
+                                "biomes and endure many hardships.\n" + 
                                 "Enjoy you journey, traveller!",35);
         addObject(description,getWidth()/2,getHeight()/2);
-    }
-    
-    public void act(){
-        
     }
 }

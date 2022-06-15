@@ -17,8 +17,6 @@ public class Level5 extends Levels
     private GreenfootImage magmaBlock = new GreenfootImage("magma block.png");
     private Decor[] lavaScroll = new Decor[2];
     private Decor[] skyScroll = new Decor[2];
-    private BreakingBlock[] breakingBlock = new BreakingBlock[8];
-    private LocationTracker[] trackers = new LocationTracker[8];
     private InGameText title;
     /**
      * Constructor for objects of class Level3.
@@ -26,7 +24,7 @@ public class Level5 extends Levels
      */
     public Level5()
     {
-        super(711,400,1,false);
+        super(711,400,1,false,8);
         magmaBlock.scale(48,48);
         construct();
         player = new Player();
@@ -60,16 +58,6 @@ public class Level5 extends Levels
             }
             if(Player.warpedToCheckpoint){
                 block.reset();
-            }
-        }
-        if(player.getCheckpoint() != null){
-            for(int i = 0; i < 8; i++){
-                try{
-                    breakingBlock[i].x = trackers[i].getX()-(player.getCheckpoint().getX()-getWidth()/2);
-                    breakingBlock[i].y = trackers[i].getY();
-                }catch(IllegalStateException e){
-
-                }
             }
         }
     }
@@ -110,12 +98,7 @@ public class Level5 extends Levels
 
         GreenfootImage cobble = new GreenfootImage("cobblestone.png");
         cobble.scale(48,48);
-        for(int i = 0; i < 8; i++){
-            BreakingBlock cobblestone = new BreakingBlock(cobble,1);
-            breakingBlock[i] = cobblestone;
-            LocationTracker tracker = new LocationTracker();
-            trackers[i] = tracker;
-        }
+        setupBreakingBlocks(cobble,1);
         addBreakingBlock(breakingBlock[0],trackers[0],620,320);
         addBreakingBlock(breakingBlock[1],trackers[1],770,280);
         addObject(new Block(magmaBlock),1050,360);
@@ -134,7 +117,7 @@ public class Level5 extends Levels
         title = new InGameText("SCORCHED WASTELAND",Color.WHITE,new Font("Constantia",true,false,40),true);
         addObject(title,600,80);
         addObject(new Block(new GreenfootImage(50,1000)),2925,300);
-        addObject(new Gate(new GreenfootImage("gate3.png")),2850,200);
+        addObject(new Gate(new GreenfootImage("gate6.png")),2850,203);
     }
 
     public void createSpawnPlatform(GreenfootImage strip){

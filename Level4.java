@@ -24,7 +24,7 @@ public class Level4 extends Levels
      */
     public Level4()
     {
-        super(711,400,1,false);
+        super(711,400,1,false,0);
         player = new Player();
         construct();
         addCameraFollower(pause,-320,-170);
@@ -83,7 +83,7 @@ public class Level4 extends Levels
         }
         ice.scale(48,48);
         addObject(new Decor(new GreenfootImage("gate4.png")),350,196);
-        createSpawnPlatform(ice,iceStrip);
+        createSpawnPlatform(ice,iceStrip,false);
         for(int i = 0; i < 16; i++){
             addIceStrip(-48*4+48*i,287);
         }
@@ -107,7 +107,7 @@ public class Level4 extends Levels
             addIceStrip(2252+48*i,324);
         }
         addObject(new Block(new GreenfootImage(50,1000)),2677,300);
-        addObject(new Gate(new GreenfootImage("gate2.png")),2602,267);
+        addObject(new Gate(new GreenfootImage("gate2.png")),2602,269);
         title = new InGameText("FROZEN TUNDRA",Color.RED,new Font("Constantia",true,false,40),true);
         addObject(title,535,80);
     }

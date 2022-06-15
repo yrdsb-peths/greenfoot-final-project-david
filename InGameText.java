@@ -48,7 +48,7 @@ public class InGameText extends Actor
     }
 
     public void updateImage(){
-        image = new GreenfootImage(font.getSize()*4*text.length()/3,font.getSize()*4/3+10);
+        image = new GreenfootImage(font.getSize()*4*text.length()/3,font.getSize()*5/3+10);
         image.setColor(color);
         image.setFont(font);
         image.drawString(text,0,font.getSize()*4/3+10);

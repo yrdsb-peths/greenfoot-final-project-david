@@ -137,6 +137,7 @@ public class Settings extends ScrollWorld
             }
             ScrollWorld.volume = newVolume;
             volumeValue.setValue(newVolume);
+            BGMManager.setVolume(newVolume);
         }
         String clearGetKey = Greenfoot.getKey();
     }
