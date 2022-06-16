@@ -1,24 +1,20 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class IceBlock here.
+ * An ice block that prevents the player from dashing or double jumping.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class IceBlock extends Block
 {
     /**
-     * Act - do whatever the IceBlock wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Instantiates a new IceBlock
+     * 
+     * @param image The image of the block
      */
     
     public IceBlock(GreenfootImage image){
         super(image);
-    }
-    
-    public void act()
-    {
-        // Add your action code here.
     }
 }

@@ -1,35 +1,37 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Help here.
+ * A world to help players get started
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class Story extends ScrollWorld
 {
-    Label description;
-    Font constantia = new Font("Constantia",true,false,40);
+    private int frames = 0;
     /**
-     * Constructor for objects of class Help.
-     * 
+     * Constructs a help world
      */
     public Story()
     {
         super(711,400,1,true);
-        
         GreenfootImage backButton = new GreenfootImage("orangeButton.png");
-        backButton.setFont(constantia);
+        backButton.setFont(DetailsRenderer.constantiaB40);
         backButton.drawString("BACK",45,30);
         backButton.scale(100,18);
         BackButton back = new BackButton(new StartingScreen(),backButton);
         addCameraFollower(back,70-getWidth()/2,22-getHeight()/2);
-        
-        addCameraFollower(new Scroller(),getWidth()/2,getHeight()/2);
-        description = new Label("You are a traveller setting off on a\n" + 
-                                "Journey. You will journey through many\n" + 
-                                "biomes and endure many hardships.\n" + 
-                                "Enjoy you journey, traveller!",35);
+        Label description = new Label("You are a traveller setting off on a\n" + 
+                                      "Journey. You will journey through many\n" + 
+                                      "biomes and endure many hardships.\n" + 
+                                      "Enjoy you journey, traveller!",35);
         addObject(description,getWidth()/2,getHeight()/2);
+    }
+
+    public void act(){
+        if(frames%2 == 0){
+            moveCam(1,0);
+        }
+        frames++;
     }
 }

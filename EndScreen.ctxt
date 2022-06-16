@@ -1,13 +1,18 @@
 #BlueJ class context
 comment0.target=EndScreen
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ EndScreen\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ The\ world\ to\ display\ when\ the\ player\ successfully\ completes\ the\ game.\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=
 comment1.target=EndScreen()
-comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ EndScreen.\r\n\ \r\n
+comment1.text=\r\n\ Constructor\ for\ the\ EndScreen\ world.\r\n\ \r\n
 comment2.params=
 comment2.target=void\ act()
 comment3.params=
-comment3.target=void\ calculateTime()
+comment3.target=void\ addScoreboard()
+comment3.text=\r\n\ Adds\ the\ score\ panel,\ as\ well\ as\ the\ scores\r\n
 comment4.params=
-comment4.target=void\ reset()
-numComments=5
+comment4.target=void\ calculateTime()
+comment4.text=\r\n\ Calculates\ the\ time\ taken\ to\ finish\ the\ game\ in\ hours,minutes,seconds,milliseconds\r\n
+comment5.params=
+comment5.target=void\ reset()
+comment5.text=\r\n\ Resets\ the\ player's\ statistics\r\n
+numComments=6

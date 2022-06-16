@@ -1,95 +1,47 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Levels here.
+ * A class to facilitate the creation of levels. 
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public abstract class Levels extends ScrollWorld
 {
-    public Label resume;
-    public Label settings;
-    public Decor blur;
-    public Decor panel;
+    public Player player;
     public PauseButton pause;
-    public Decor exit;
     public BreakingBlock[] breakingBlock;
-    public LocationTracker[] trackers;
+    public Decor[] trackers;
+    public Decor[] skyScroll = new Decor[2];
+    public Decor[] voidScroll = new Decor[2];
     /**
-     * Constructor for objects of class Levels.
+     * Constructor for instances of Levels.
+     * 
+     * @param width Width of the world, in pixels
+     * @param height Height of the world, in pixels
+     * @param cellSize Size of the cell of the world, in pixels
+     * @param inverted Whether or not the world scrolls with inverted backgrounds
+     * @param numBreakingBlocks Number of BreakingBlocks to be created in the world
      * 
      */
     public Levels(int width, int height, int cellSize, boolean inverted, int numBreakingBlocks)
     {
         super(width,height,cellSize,inverted);
+        
         breakingBlock = new BreakingBlock[numBreakingBlocks];
-        trackers = new LocationTracker[numBreakingBlocks];
-        createPauseButton();
-    }
-
-    public void createPauseButton(){
-        Font constantia = new Font("Constantia",true,false,30);
-
-        GreenfootImage backButton = new GreenfootImage("orangeButton.png");
-        backButton.setFont(constantia);
-        backButton.drawString("EXIT",63,30);
-        exit = new Decor(backButton);
-
-        GreenfootImage resumeButton = new GreenfootImage("orangeButton.png");
-        resumeButton.setFont(constantia);
-        resumeButton.drawString("RESUME",40,28);
-        resume = new Label(resumeButton);
-
-        GreenfootImage settingsButton = new GreenfootImage("orangeButton.png");
-        settingsButton.setFont(constantia);
-        settingsButton.drawString("SETTINGS",30,28);
-        settings = new Label(settingsButton);
-
-        GreenfootImage tint = new GreenfootImage(711,400);
-        tint.setColor(new Color(128,128,128,75));
-        tint.fill();
-        blur = new Decor(tint);
-
-        GreenfootImage frame = new GreenfootImage(350,200);
-        frame.setColor(Color.GRAY);
-        frame.fill();
-        panel = new Decor(frame);
-
+        trackers = new Decor[numBreakingBlocks];
+        
         pause = new PauseButton();
+        player = new Player();
     }
 
-    public void clickedPauseButton(){
-        if(Greenfoot.mouseClicked(pause)){
-            Player.paused = true;
-            addObject(blur,getWidth()/2,getHeight()/2);
-            addObject(panel,getWidth()/2,getHeight()/2);
-            addObject(resume,getWidth()/2,150);
-            addObject(settings,getWidth()/2,200);
-            addObject(exit,getWidth()/2,250);
-        }
-        if(Greenfoot.mouseClicked(resume)){
-            Player.paused = false;
-            removePausePanel();
-        }
-        if(Greenfoot.mouseClicked(settings)){
-            removePausePanel();
-            changeWorld(new Settings(Player.levels[Player.level]));
-        }
-        if(Greenfoot.mouseClicked(exit)){
-            removePausePanel();
-            changeWorld(new StartingScreen());
-        }
-    }
-
-    public void removePausePanel(){
-        removeObject(blur);
-        removeObject(panel);
-        removeObject(resume);
-        removeObject(settings);
-        removeObject(exit);
-    }
-
+    /**
+     * Generates the images of the spawn platform, with fading to black
+     * 
+     * @param image The image of each individual block
+     * @param toDraw The GreenfootImage that acts as the strip
+     * @param isLastLevel whether the level this is drawn for is the last level
+     */
     public void createSpawnPlatform(GreenfootImage image, GreenfootImage toDraw,boolean isLastLevel){
         GreenfootImage tempImage = new GreenfootImage(image);
         for(int n = 0; n < 48; n++){
@@ -112,19 +64,84 @@ public abstract class Levels extends ScrollWorld
             toDraw.drawImage(tempImage,0,i*48);
         }
         if(!isLastLevel){
-            addObject(new Block(new GreenfootImage(50,1000)),125,225);
+            addObject(new Block(DetailsRenderer.barrier),125,225);
         }else{
-            addObject(new Block(new GreenfootImage(50,1000)),711-125,225);
+            addObject(new Block(DetailsRenderer.barrier),586,225);
+        }
+    }
+    
+    /**
+     * Implements a sky
+     * 
+     * @param color The color for the sky
+     */
+    public void addSky(Color color){
+        GreenfootImage sky = new GreenfootImage(716,400);
+        sky.setColor(color);
+        sky.fill();
+        for(int i = 0; i < 2; i++){
+            Decor sky1 = new Decor(sky);
+            skyScroll[i] = sky1;
+            addObject(sky1,-358+716*i,-getHeight()/2);
         }
     }
 
-    public void addBreakingBlock(BreakingBlock block,LocationTracker tracker,int x,int y){
+    /**
+     * Adds the void
+     * 
+     * @param color The color for the void
+     */
+    public void addVoid(Color color){
+        GreenfootImage bottom = new GreenfootImage(716,2064);
+        bottom.setColor(color);
+        bottom.fill();
+        for(int i = 0; i < 2; i++){
+            Decor black = new Decor(bottom);
+            voidScroll[i] = black;
+            addObject(black,-358+716*i,getHeight()/2+1200);
+        }
+    }
+    
+    /**
+     * Scrolls the sky and the void
+     */
+    public void scrollSkyAndVoid(){
+        for(Decor sky: skyScroll){
+            if(sky.getX() < -716/2){
+                sky.setLocation(sky.getX()+1432,sky.getY());
+            }
+            if(sky.getX() > 716*3/2){
+                sky.setLocation(sky.getX()-1432,sky.getY());
+            }
+        }
+        for(Decor black: voidScroll){
+            if(black.getX() < -716/2){
+                black.setLocation(black.getX()+1432,black.getY());
+            }
+            if(black.getX() > 716*3/2){
+                black.setLocation(black.getX()-1432,black.getY());
+            }
+        }
+    }
+    
+    /**
+     * Adds a breaking block to the world
+     * 
+     * @param block The BreakingBlock object to add
+     * @param tracker The tracker to track the block
+     * @param x The x coordinate of the block
+     * @param y The y coordinate of the block
+     */
+    public void addBreakingBlock(BreakingBlock block,Decor tracker,int x,int y){
         addObject(block,x,y);
         addObject(tracker,x,y);
         block.x = x;
         block.y = y;
     }
 
+    /**
+     * Resets the status of all breaking blocks.
+     */
     public void resetBreakingBlocks(){
         for(int i = 0; i < breakingBlock.length; i++){
             BreakingBlock block = breakingBlock[i];
@@ -138,12 +155,18 @@ public abstract class Levels extends ScrollWorld
         }
     }
 
+    /**
+     * Creates all of the breaking blocks to be added in the world
+     * 
+     * @param image The sprite of the BreakingBlock
+     * @param duration The number of frames between each time the BreakingBlock cracks
+     */
     public void setupBreakingBlocks(GreenfootImage image,int duration){
         if(breakingBlock.length != 0){
             for(int i = 0; i < breakingBlock.length; i++){
                 BreakingBlock cobblestone = new BreakingBlock(image,duration);
                 breakingBlock[i] = cobblestone;
-                LocationTracker tracker = new LocationTracker();
+                Decor tracker = new Decor(new GreenfootImage(1,1));
                 trackers[i] = tracker;
             }
         }

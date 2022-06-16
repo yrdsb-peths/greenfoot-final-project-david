@@ -1,9 +1,21 @@
 #BlueJ class context
 comment0.target=PauseButton
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ PauseButton\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ Allows\ the\ game\ to\ be\ paused,\ resumed,\ and\ exited.\r\n\ Allows\ the\ player\ to\ change\ their\ keybinds\ and\ volume\ at\ anytime\ via\ the\ settings.\ \r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=
 comment1.target=PauseButton()
-comment1.text=\r\n\ Act\ -\ do\ whatever\ the\ PauseButton\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n
+comment1.text=\r\n\ Initializes\ a\ pause\ button.\r\n
 comment2.params=
-comment2.target=void\ setup()
-numComments=3
+comment2.target=void\ act()
+comment3.params=
+comment3.target=void\ setup()
+comment3.text=\r\n\ Sets\ up\ the\ pause\ button\r\n
+comment4.params=
+comment4.target=void\ createPausePanel()
+comment4.text=\r\n\ Sets\ up\ the\ pause\ panel\r\n
+comment5.params=
+comment5.target=void\ clickedPauseButton()
+comment5.text=\r\n\ Performs\ actions\ depending\ on\ what\ button\ is\ clicked.\r\n
+comment6.params=
+comment6.target=void\ removePausePanel()
+comment6.text=\r\n\ Removes\ the\ pause\ panel\r\n
+numComments=7

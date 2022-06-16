@@ -1,10 +1,13 @@
 #BlueJ class context
 comment0.target=Stats
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ Stats\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ Keeps\ track\ of\ all\ player\ stats.\ (Time,\ jumps,\ death)\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=start
 comment1.target=Stats(boolean)
+comment1.text=\r\n\ Instantiates\ a\ Stats\ object\r\n\ \r\n\ @param\ start\ Whether\ or\ not\ the\ timer\ starts\ (if\ true)\ or\ ends\ (if\ false).\ \r\n
 comment2.params=
 comment2.target=void\ startTimer()
+comment2.text=\r\n\ Starts\ the\ timer.\r\n
 comment3.params=
 comment3.target=void\ endTimer()
+comment3.text=\r\n\ Ends\ the\ timer.\r\n
 numComments=4

@@ -1,19 +1,18 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Help here.
+ * The world to explain game mechanics and allow players to test movement
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class Help extends ScrollWorld
 {
     Label description;
-    Font constantia = new Font("Constantia",true,false,40);
-    Block[] allBlocks = new Block[4];
+    Block[] allBlocks = new Block[6];
     Label desc;
     /**
-     * Constructor for objects of class Help.
+     * Initiates a new Help world
      * 
      */
     public Help()
@@ -23,20 +22,17 @@ public class Help extends ScrollWorld
         Player demo = new Player();
         addCameraFollower(demo,213,50);
 
-        GreenfootImage ground = new GreenfootImage("grass block.png");
-        ground.scale(65,65);
-
-        for(int i = 0; i < 4; i++){
-            Block demoGround = new Block(ground);
-            addObject(demoGround, 425+i*65,315);
+        for(int i = 0; i < 6; i++){
+            Block demoGround = new Block(DetailsRenderer.grassBlock);
+            addObject(demoGround, 425+i*48,315);
             allBlocks[i] = demoGround;
         }
         
         Label frame = new Label(new GreenfootImage("frame-1.png"));
-        addObject(frame,711/2,400/2);
+        addObject(frame,355,200);
         
         GreenfootImage backButton = new GreenfootImage("orangeButton.png");
-        backButton.setFont(constantia);
+        backButton.setFont(DetailsRenderer.constantiaB40);
         backButton.drawString("BACK",45,30);
         backButton.scale(100,18);
         BackButton back = new BackButton(new StartingScreen(),backButton);
@@ -58,11 +54,12 @@ public class Help extends ScrollWorld
     }
 
     public void act(){
+        // To scroll the small platform
         for(Block block : allBlocks){
             if(block.getX() < 415){
-                block.setLocation(block.getX()+4*65,block.getY());
+                block.setLocation(block.getX()+260,block.getY());
             }else if(block.getX() > 715){
-                block.setLocation(block.getX()-4*65,block.getY());
+                block.setLocation(block.getX()-260,block.getY());
             }
         }
     }

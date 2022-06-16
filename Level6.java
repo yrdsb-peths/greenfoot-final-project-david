@@ -1,149 +1,135 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Level6 here.
+ * The sixth and last level of the game
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class Level6 extends Levels
 {
-    private GreenfootImage grass = new GreenfootImage("grass block.png");
-    private GreenfootImage dirt = new GreenfootImage("dirt.png");
-    private GreenfootImage dirt1 = new GreenfootImage(48,48*43);
-    private GreenfootImage grassStripImage = new GreenfootImage(48,48*43);
-    private Decor[] skyScroll = new Decor[2];
-    private Decor[] darknessScroll = new Decor[2];
-    private GreenfootImage stoneStrip = new GreenfootImage(48,48*43);
-    private GreenfootImage stone = new GreenfootImage("stone0.png");
-    private GreenfootImage sky = new GreenfootImage("sky.png");
-    private GreenfootImage darkness = new GreenfootImage(716,48*43);
-    private GreenfootImage magmaBlock = new GreenfootImage("magma block.png");
-    private GreenfootImage ice = new GreenfootImage("ice.png");
-    private GreenfootImage mossStone = new GreenfootImage("moss stone.png");
-    public Player player;
+    private GreenfootImage grassStripImage = new GreenfootImage(48,2064);
+    private GreenfootImage stoneStrip = new GreenfootImage(48,2064);
     private InGameText title;
     /**
-     * Constructor for objects of class Level6.
-     * 
+     * Constructs level 6
      */
     public Level6()
     {
         super(711,400,1,false,5);
+        
+        addMisc();
         construct();
-        player = new Player();
-        addCameraFollower(player, 0, 75);
+        
+        addCameraFollower(player,0,75);
         addCameraFollower(pause,-320,-170);
+        addObject(title,535,80);
     }
 
     public void act(){
-        for(Decor sky: skyScroll){
-            if(sky.getX() < -716/2){
-                sky.setLocation(sky.getX()+716*2,sky.getY());
-            }
-            if(sky.getX() > 716*3/2){
-                sky.setLocation(sky.getX()-716*2,sky.getY());
-            }
-        }
-        for(Decor darkness: darknessScroll){
-            if(darkness.getX() < -716/2){
-                darkness.setLocation(darkness.getX()+716*2,darkness.getY());
-            }
-            if(darkness.getX() > 716*3/2){
-                darkness.setLocation(darkness.getX()-716*2,darkness.getY());
-            }
-        }
+        scrollSkyAndVoid();
     }
 
-    public void construct(){
-        GreenfootImage arrowSign = new GreenfootImage("arrow sign.png");
-        arrowSign.scale(40,60);
-        Decor sign = new Decor(arrowSign);
+    public void addMisc(){
+        addSky(new Color(168,214,255));
+        addVoid(Color.BLACK);
         
-        addObject(sign,48*4,287);
-        sky.scale(716,400);
-        darkness.setColor(Color.BLACK);
-        darkness.fill();
-        for(int i = 0; i < 2; i++){
-            Decor darkness = new Decor(this.darkness);
-            darknessScroll[i] = darkness;
-            addObject(darkness,-716/2+716*i,getHeight()/2+48*25);
-            Decor sky = new Decor(this.sky);
-            skyScroll[i] = sky;
-            addObject(sky,-716/2+716*i,-getHeight()/2);
-        }
-        stone.scale(48,48);
-        createSpawnPlatform(stone,stoneStrip,true);
-        for(int i = 0; i < 16; i++){
-            addStoneStrip(48*i+48*4,287);
-        }
+        title = new InGameText("HOME SWEET HOME",Color.WHITE,DetailsRenderer.constantiaB40,true);
+        
+        Decor sign = new Decor(DetailsRenderer.arrowSign);
+        addObject(sign,192,287);
+        
+        addObject(new Checkpoint(),-450,249);
+        addObject(new Checkpoint(),-1000,229);
+        addObject(new Checkpoint(),-2248,229);
+        addObject(new Checkpoint(),-3700,249);
+        
         GreenfootImage gate = new GreenfootImage("gate6.png");
         gate.mirrorHorizontally();
         addObject(new Decor(gate),350,189);
-        magmaBlock.scale(48,48);
-        ice.scale(48,48);
-        mossStone.scale(48,48);
-        dirt.scale(48,48);
-        grass.scale(48,48);
-        createSpawnPlatform(dirt,grassStripImage,true);
-        addObject(new Block(magmaBlock),100,300);
-        addObject(new Block(magmaBlock),-50,325);
-        addObject(new Block(magmaBlock),-200,325);
-        addObject(new Block(magmaBlock),-350,300);
-        addObject(new Block(magmaBlock),-450,300);
-        addObject(new Checkpoint(),-450,249);
+        
+        addObject(new Gate(new GreenfootImage("house.png"),true),-4720,206);
+    }
+    
+    public void construct(){
+        createSpawnPlatform(DetailsRenderer.stones[0],stoneStrip,true);
+        createSpawnPlatform(DetailsRenderer.dirtBlock,grassStripImage,true);
+        for(int i = 0; i < 16; i++){
+            addStoneStrip(48*i+192,287);
+        }
+        for(int i = 0; i < 16;i++){
+            addGrassStrip(-4442-48*i,280);
+        }
+        for(int i = 0; i < 3; i++){
+            addWall(DetailsRenderer.mossStoneBlock,-1248-i*400,60);
+            addSlime(-1248-i*400,380);
+            addMoss(-1448-i*400,280);
+        }
+        addObject(new Block(DetailsRenderer.magmaBlock),100,300);
+        addObject(new Block(DetailsRenderer.magmaBlock),-50,325);
+        addObject(new Block(DetailsRenderer.magmaBlock),-200,325);
+        addObject(new Block(DetailsRenderer.magmaBlock),-350,300);
+        addObject(new Block(DetailsRenderer.magmaBlock),-450,300);
+        
         addHeadHitter(-500,280);
         addHeadHitter(-600,280);
         addHeadHitter(-700,280);
         addHeadHitter(-800,280);
         addHeadHitter(-900,280);
-        addObject(new IceBlock(ice),-1000,280);
-        addObject(new Checkpoint(),-1000,229);
+        
+        addObject(new IceBlock(DetailsRenderer.iceBlock),-1000,280);
         addMoss(-1048,280);
-        for(int i = 0; i < 3; i++){
-            addWall(mossStone,-1248-i*400,60);
-            addSlime(-1248-i*400,380);
-            addMoss(-1448-i*400,280);
-        }
-        addObject(new Checkpoint(),-2248,229);
-        GreenfootImage cobble = new GreenfootImage("cobblestone.png");
-        cobble.scale(48,48);
-        setupBreakingBlocks(cobble,2);
+        
+        setupBreakingBlocks(DetailsRenderer.cobblestoneBlock,2);
         addBreakingBlock(breakingBlock[0],trackers[0],-2400,300);
         addBreakingBlock(breakingBlock[1],trackers[1],-2600,250);
         addBreakingBlock(breakingBlock[2],trackers[2],-2900,300);
         addBreakingBlock(breakingBlock[3],trackers[3],-3100,280);
         addBreakingBlock(breakingBlock[4],trackers[4],-3450,300);
-        addObject(new Block(stone),-3700,300);
-        addObject(new Checkpoint(),-3700,249);
+        
+        addObject(new Block(DetailsRenderer.stones[0]),-3700,300);
+        
         addGrassStrip(-3850,300);
         addGrassStrip(-3898,300);
         addGrassStrip(-4048,320);
         addGrassStrip(-4096,320);
         addGrassStrip(-4246,280);
         addGrassStrip(-4294,280);
-        for(int i = 0; i < 16;i++){
-            addGrassStrip(-4442-48*i,280);
-        }
-        addHouse();
-        addObject(new Block(new GreenfootImage(50,1000)),-4800,250);
-        title = new InGameText("HOME SWEET HOME",Color.WHITE,new Font("Constantia",true,false,40),true);
-        addObject(title,535,80);
+        
+        addObject(new Block(DetailsRenderer.barrier),-4800,250);
     }
 
+    /**
+     * Adds a strip of stone to the world
+     * 
+     * @param x The x coordinate to add the strip at
+     * @param y The y coordinate to add the strip at
+     */
     public void addStoneStrip(int x, int y){
         Block stoneStrip = new Block(this.stoneStrip);
-        addObject(stoneStrip,x,y+22*48);
+        addObject(stoneStrip,x,y+1056);
     }
 
+    /**
+     * Adds a set of jumps that requires the player to hit their head on a block
+     * 
+     * @param x The x coordinate to add the head hitter at
+     * @param y The y coordinate to add the head hitter at
+     */
     public void addHeadHitter(int x, int y){
-        IceBlock iceBlock1 = new IceBlock(ice);
+        IceBlock iceBlock1 = new IceBlock(DetailsRenderer.iceBlock);
         addObject(iceBlock1,x,y);
-        addWall(ice,x-50,y-240);
+        addWall(DetailsRenderer.iceBlock,x-50,y-240);
     }
 
+    /**
+     * Adds a wall
+     * 
+     * @param x The x coordinate to add the wall at
+     * @param y The y coordinate to add the wall at
+     */
     public void addWall(GreenfootImage image,int x,int y){
-        GreenfootImage wallImage = new GreenfootImage(48,48*4);
+        GreenfootImage wallImage = new GreenfootImage(48,192);
         for(int i = 0; i < 4; i++){
             wallImage.drawImage(image,0,48*i);
         }
@@ -151,33 +137,42 @@ public class Level6 extends Levels
         addObject(wall, x,y);
     }
 
+    /**
+     * Adds a moss block
+     * 
+     * @param x The x coordinate to add the moss block at
+     * @param y The y coordinate to add the moss block at
+     */
     public void addMoss(int x,int y){
-        Block moss = new Block(mossStone);
+        Block moss = new Block(DetailsRenderer.mossStoneBlock);
         addObject(moss,x,y);
     }
 
+    /**
+     * Adds a slime block
+     * 
+     * @param x The x coordinate to add the slime block at
+     * @param y The y coordinate to add the slime block at
+     */
     public void addSlime(int x,int y){
         SlimeBlock slime = new SlimeBlock();
         addObject(slime,x,y);
         if(y >= 350){
-            GreenfootImage arrowImage = new GreenfootImage("arrow.png");
-            arrowImage.scale(75,30);
-            Decor arrow = new Decor(arrowImage);
+            Decor arrow = new Decor(DetailsRenderer.redArrow);
             addObject(arrow,x,250);
             arrow.setRotation(270);
         }
     }
     
+    /**
+     * Adds a long strip of dirt with grass at the top
+     * 
+     * @param x The x coordinate to add the strip at
+     * @param y The y coordinate to add the strip at
+     */
     public void addGrassStrip(int x,int y){
-        grassStripImage.drawImage(grass,0,0);
+        grassStripImage.drawImage(DetailsRenderer.grassBlock,0,0);
         Block grassStrip = new Block(grassStripImage);
-        addObject(grassStrip,x,y+48*22);
-    }
-    
-     public void addHouse(){
-        GreenfootImage houseImage = new GreenfootImage("house.png");
-        houseImage.scale(87*7,28*7);
-        Gate house = new Gate(houseImage,true);
-        addObject(house,-4720,206);
+        addObject(grassStrip,x,y+1056);
     }
 }

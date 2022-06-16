@@ -1,62 +1,69 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Level2 here.
+ * The second level of the game. Is a cave themed level.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class Level2 extends Levels
 {
-    private GreenfootImage stone1 = new GreenfootImage(48,48*43);
-    private GreenfootImage stone = new GreenfootImage("stone0.png");
-    private GreenfootImage darkness = new GreenfootImage(716,48*43);
-    private Decor[] darknessScroll = new Decor[2];
-    private Decor[] ceilingScroll = new Decor[2];
-    public Player player;
+    private GreenfootImage stone = new GreenfootImage(48,2064);
     private InGameText title;
     /**
-     * Constructor for objects of class Level2.
-     * 
+     * Constructs Level2.
      */
-
     public Level2()
     {
         super(711,400,1,false,14);
-        stone.scale(48,48);
-        darkness.setColor(Color.BLACK);
-        darkness.fill();
-        construct();
-        player = new Player();
-        addCameraFollower(player, 0, 75);
+        
+        addMisc();
+        addBlocks();
+        
+        addCameraFollower(player,0,75);
+        addCameraFollower(pause,-320,-170);
+        addObject(title,550,80);
     }
 
-    public void construct(){
-        GreenfootImage sign = new GreenfootImage("arrow sign.png");
-        sign.mirrorHorizontally();
-        sign.scale(40,60);
-        Sign arrowSign = new Sign(sign,"                    WARNING! \n           UNSTABLE TERRAIN \n        PROCEED WITH HASTE");
+    public void act(){
+        scrollSkyAndVoid();
+        resetBreakingBlocks();
+    }
+
+    /**
+     * Adds miscellaneous actors to this world
+     */
+    public void addMisc(){
+        addSky(Color.BLACK);
+        addVoid(Color.BLACK);
+        
+        title = new InGameText("CRUMBLING CAVE",Color.WHITE,DetailsRenderer.constantiaB40,true);
+        
+        Sign arrowSign = new Sign(DetailsRenderer.arrowSign,"                    WARNING! \n           UNSTABLE TERRAIN \n        PROCEED WITH HASTE");
         addObject(arrowSign,540,300);
-        for(int i = 0; i < 2; i++){
-            Decor black = new Decor(darkness);
-            darknessScroll[i] = black;
-            addObject(black,-716/2+716*i,getHeight()/2+48*25-10);
-        }
-        createSpawnPlatform(stone,stone1,false);
-        for(int i = 0; i < 16; i++){
-            addStone(-48*4+48*i,287);
-        }
+        
+        Decor arrow = new Decor(DetailsRenderer.redArrow);
+        addObject(arrow,2300,175);
+        arrow.setRotation(270);
+        
+        addObject(new Checkpoint(),1200,300);
         addObject(new Decor(new GreenfootImage("gate1.png")),getWidth()/2-5,233);
-        for(int i = 0; i < 2; i++){
-            GreenfootImage ceiling = new GreenfootImage(darkness);
-            ceiling.scale(716,400);
-            Decor ceiling1 = new Decor(ceiling);
-            ceilingScroll[i] = ceiling1;
-            addObject(ceiling1,-716/2+716*i,-getHeight()/2);
+        addObject(new Gate(new GreenfootImage("gate3.png")),3750,200);
+    }
+    
+    /**
+     * Adds all actors of the Block.class or its subclasses
+     */
+    public void addBlocks(){
+        createSpawnPlatform(DetailsRenderer.stones[0],stone,false);
+        for(int i = 0; i < 16; i++){
+            addStone(-192+48*i,287);
         }
-        GreenfootImage cobble = new GreenfootImage("cobblestone.png");
-        cobble.scale(48,48);
-        setupBreakingBlocks(cobble,2);
+        for(int i = 0; i < 16; i++){
+            addStone(3400+48*i,300);
+        }
+        setupBreakingBlocks(DetailsRenderer.cobblestoneBlock,2);
+        
         addBreakingBlock(breakingBlock[0],trackers[0],600,300);
         addBreakingBlock(breakingBlock[1],trackers[1],755,350);
         addBreakingBlock(breakingBlock[2],trackers[2],850,350);
@@ -71,57 +78,19 @@ public class Level2 extends Levels
         addBreakingBlock(breakingBlock[11],trackers[11],2850,300);
         addBreakingBlock(breakingBlock[12],trackers[12],3100,250);
         addBreakingBlock(breakingBlock[13],trackers[13],3300,290);
-        for(int i = 0; i < 16; i++){
-            addStone(3400+48*i,300);
-        }
-        addObject(new Block(new GreenfootImage(50,1000)),3825,225);
         
-        GreenfootImage redArrow = new GreenfootImage("arrow.png");
-        redArrow.scale(75,30);
-        Decor arrow = new Decor(redArrow);
-        addObject(arrow,2300,175);
-        arrow.setRotation(270);
         addStone(1200,300);
-        addObject(new Checkpoint(),1200,300);
-        addObject(new Gate(new GreenfootImage("gate3.png")),3750,200);
-        
-        title = new InGameText("CRUMBLING CAVE",Color.WHITE,new Font("Constantia",true,false,40),true);
-        addObject(title,550,80);
-        
-        addCameraFollower(pause,-320,-170);
+        addObject(new Block(DetailsRenderer.barrier),3825,225);
     }
 
-    public void act(){
-        for(Decor ceiling: ceilingScroll){
-            if(ceiling.getX() < -716/2){
-                ceiling.setLocation(ceiling.getX()+716*2,ceiling.getY());
-            }
-            if(ceiling.getX() > 716*3/2){
-                ceiling.setLocation(ceiling.getX()-716*2,ceiling.getY());
-            }
-        }
-        for(Decor black: darknessScroll){
-            if(black.getX() < -716/2){
-                black.setLocation(black.getX()+716*2,black.getY());
-            }
-            if(black.getX() > 716*3/2){
-                black.setLocation(black.getX()-716*2,black.getY());
-            }
-        }
-        for(BreakingBlock block:breakingBlock){
-            if(block.removed && Player.warpedToCheckpoint){
-                addObject(block,block.x,block.y);
-                block.removed = false;
-            }
-            if(Player.warpedToCheckpoint){
-                block.reset();
-            }
-        }
-        clickedPauseButton();
-    }
-
+    /**
+     * Adds a strip of stone
+     * 
+     * @param x The x coordinate to add the strip at
+     * @param y The y coordinate to add the strip at
+     */
     public void addStone(int x, int y){
-        Block stoneBlock = new Block(stone1);
-        addObject(stoneBlock,x,y+48*22);
+        Block stoneBlock = new Block(stone);
+        addObject(stoneBlock,x,y+1056);
     }
 }

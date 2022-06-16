@@ -1,13 +1,16 @@
 #BlueJ class context
 comment0.target=BGMManager
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ BGMManager\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
-comment1.params=
-comment1.target=BGMManager()
-comment1.text=\r\n\ Act\ -\ do\ whatever\ the\ BGMManager\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n
-comment2.params=i
-comment2.target=void\ setMusic(int)
-comment3.params=
-comment3.target=void\ stopAllMusic()
-comment4.params=volume
-comment4.target=void\ setVolume(int)
+comment0.text=\r\n\ A\ class\ made\ for\ the\ sole\ purpose\ of\ providing\ a\ way\ to\ manage\ the\ music\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/15\r\n
+comment1.params=world
+comment1.target=void\ setMusic(greenfoot.World)
+comment1.text=\r\n\ Sets\ the\ music\ based\ on\ the\ given\ world\r\n\ \r\n\ @param\ world\ The\ world\ that\ the\ music\ is\ to\ be\ played\ for\r\n
+comment2.params=
+comment2.target=void\ stopAllMusic()
+comment2.text=\r\n\ Stops\ any\ currently\ playing\ music\r\n
+comment3.params=volume
+comment3.target=void\ setVolume(int)
+comment3.text=\r\n\ Sets\ the\ volume\r\n\ \r\n\ @param\ volume\ The\ volume\ to\ be\ set\ to,\ the\ value\ should\ be\ from\ 0\ to\ 100,\ inclusive\r\n
+comment4.params=world
+comment4.target=int\ checkWorld(greenfoot.World)
+comment4.text=\r\n\ Checks\ the\ index\ of\ the\ music\ list\ to\ be\ played,\ depending\ on\ the\ world\r\n\ \r\n\ @param\ world\ The\ world\ that\ the\ music\ is\ to\ be\ played\ for\r\n\ \r\n\ @return\ The\ corresponding\ index\ of\ the\ world's\ music\ in\ the\ music\ array\r\n
 numComments=5

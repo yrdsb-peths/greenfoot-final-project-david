@@ -1,11 +1,12 @@
 #BlueJ class context
 comment0.target=BreakingBlock
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ FallingBlock\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ A\ block\ that\ breaks\ if\ the\ player\ stands\ on\ it\ for\ too\ long.\r\n\ The\ block\ breaks\ after\ it\ cracks\ 10\ times.\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=image\ frequency
 comment1.target=BreakingBlock(greenfoot.GreenfootImage,\ int)
-comment1.text=\r\n\ Act\ -\ do\ whatever\ the\ FallingBlock\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n
+comment1.text=\r\n\ Instantiates\ a\ BreakingBlock.\r\n\ \r\n\ @param\ image\ The\ image\ of\ the\ block\r\n\ @param\ frequency\ How\ many\ frames\ between\ each\ time\ the\ block\ cracks\r\n
 comment2.params=
 comment2.target=void\ act()
 comment3.params=
 comment3.target=void\ reset()
+comment3.text=\r\n\ Resets\ the\ state\ of\ the\ block.\r\n
 numComments=4

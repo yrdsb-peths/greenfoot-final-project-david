@@ -1,9 +1,10 @@
 #BlueJ class context
 comment0.target=PlayerDummy
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ PlayerDummy\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ An\ acting\ dummy\ of\ the\ player.\ It\ cannot\ be\ controlled\ by\ the\ user.\ \r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=
 comment1.target=PlayerDummy()
-comment1.text=\r\n\ Act\ -\ do\ whatever\ the\ PlayerDummy\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n
+comment1.text=\r\n\ Initializes\ the\ dummy,\ sets\ up\ the\ animation\ sprites\r\n
 comment2.params=
 comment2.target=void\ act()
+comment2.text=Moves\ the\ dummy
 numComments=3

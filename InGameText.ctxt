@@ -1,11 +1,15 @@
 #BlueJ class context
 comment0.target=InGameText
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ InGameText\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ A\ class\ to\ display\ text.\ Provides\ more\ versatility\ than\ the\ Label\ class\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=text\ color\ font\ fade
 comment1.target=InGameText(java.lang.String,\ greenfoot.Color,\ greenfoot.Font,\ boolean)
-comment1.text=\r\n\ Act\ -\ do\ whatever\ the\ InGameText\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n
+comment1.text=\r\n\ The\ constructor\ for\ the\ class.\r\n\ \r\n\ @param\ text\ The\ text\ to\ be\ displayed\r\n\ @param\ color\ The\ color\ of\ the\ text\ to\ be\ displayed\r\n\ @param\ font\ The\ font\ of\ the\ text\ to\ be\ displayed\r\n\ @param\ fade\ Whether\ or\ not\ the\ text\ will\ fade\ in\ and\ then\ out\r\n
 comment2.params=
 comment2.target=void\ act()
 comment3.params=
-comment3.target=void\ updateImage()
-numComments=4
+comment3.target=void\ fade()
+comment3.text=\r\n\ If\ the\ text\ is\ made\ to\ fade,\ this\ will\ cause\ the\ text\ to\ fade\ in,\ stop\ for\ a\ while,\ and\ then\ fade\ out\r\n
+comment4.params=
+comment4.target=void\ updateImage()
+comment4.text=\r\n\ Updates\ the\ text\ image\ with\ the\ appearance\ information\ \r\n
+numComments=5

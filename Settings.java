@@ -1,10 +1,10 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Settings here.
+ * The player can change the volume and key binds in this world
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class Settings extends ScrollWorld
 {
@@ -12,7 +12,6 @@ public class Settings extends ScrollWorld
     private GreenfootImage controls;
     private GreenfootImage otherSettings;
     private Color color = new Color(233,252,20);
-    private Font constantia = new Font("Constantia",true,false,40);
     private Label controlsPanel;
     private Label othersPanel;
     private Label jumpKey;
@@ -20,11 +19,11 @@ public class Settings extends ScrollWorld
     private Label leftKey;
     private Label dashKey;
     private Label volumeValue;
-    private Scroller scroller = new Scroller();
     private int newVolume = -1;
     private BackButton back;
+    private int frames = 0;
     /**
-     * Constructor for objects of class Settings.
+     * Creates an instance of this world that sends the player to the starting screen
      * 
      */
 
@@ -32,12 +31,17 @@ public class Settings extends ScrollWorld
         this(null);
     }
 
+    /**
+     * Creates an instance of this world that sends the player to the indicated level
+     * 
+     * @param prevWorld The level that this world was accessed from
+     */
     public Settings(Levels prevWorld)
     {
         super(711,400,1,true);
 
         GreenfootImage backButton = new GreenfootImage("orangeButton.png");
-        backButton.setFont(constantia);
+        backButton.setFont(DetailsRenderer.constantiaB40);
         backButton.drawString("BACK",45,30);
         backButton.scale(100,18);
         if(prevWorld != null){
@@ -52,14 +56,14 @@ public class Settings extends ScrollWorld
 
         controls = new GreenfootImage(panel);
         controls.setColor(color);
-        controls.setFont(constantia);
+        controls.setFont(DetailsRenderer.constantiaB40);
         controls.drawString("Controls",70,50);
         controlsPanel = new Label(controls);
         addObject(controlsPanel,195,210);
 
         otherSettings  = new GreenfootImage(panel);
         otherSettings.setColor(color);
-        otherSettings.setFont(constantia);
+        otherSettings.setFont(DetailsRenderer.constantiaB40);
         otherSettings.drawString("Settings",75,50);
         othersPanel = new Label(otherSettings);
         addObject(othersPanel,515,210);
@@ -100,14 +104,41 @@ public class Settings extends ScrollWorld
         addObject(dashKey,240,320);
 
         volumeValue = new Label(new GreenfootImage("white.png"));
-        volumeValue.setValue(ScrollWorld.volume);
+        volumeValue.setValue(BGMManager.volume);
         volumeValue.setFontSize(20);
         addObject(volumeValue,580,200);
-
-        addCameraFollower(scroller,0,0);
     }
 
     public void act(){
+        checkClickedKey();
+        if(Greenfoot.mouseClicked(volumeValue)){
+            setVolume();
+            BGMManager.volume = newVolume;
+            volumeValue.setValue(newVolume);
+            BGMManager.setVolume(newVolume);
+        }
+        String clearGetKey = Greenfoot.getKey();
+        scroll();
+    }
+
+    public void setVolume(){
+        try{
+            newVolume = Integer.parseInt(Greenfoot.ask("Enter the new volume: "));
+        }catch(NumberFormatException e){
+            // To prevent strings with chars from causing errors with Integer.parseInt();
+        }
+        while(newVolume < 0 || newVolume > 100 || newVolume == -1){
+            try{
+                newVolume = Integer.parseInt(Greenfoot.ask("Invalid value. Please reenter the desired volume (1-100): "));
+            }catch(NumberFormatException e){
+                // To prevent strings with chars from causing errors with Integer.parseInt();
+            }
+            scroll();
+            repaint();
+        }
+    }
+
+    public void checkClickedKey(){
         if(Greenfoot.mouseClicked(jumpKey)){
             Player.jump = changeKey(jumpKey);
         }
@@ -120,34 +151,29 @@ public class Settings extends ScrollWorld
         if(Greenfoot.mouseClicked(dashKey)){
             Player.dash = changeKey(dashKey);
         }
-        if(Greenfoot.mouseClicked(volumeValue)){
-            try{
-                newVolume = Integer.parseInt(Greenfoot.ask("Enter the new volume: "));
-            }catch(NumberFormatException e){
-                // To prevent strings with chars from causing errors with Integer.parseInt();
-            }
-            while(newVolume < 0 || newVolume > 100 || newVolume == -1){
-                try{
-                    newVolume = Integer.parseInt(Greenfoot.ask("Invalid value. Please reenter the desired volume (1-100): "));
-                }catch(NumberFormatException e){
-                    // To prevent strings with chars from causing errors with Integer.parseInt();
-                }
-                scroller.act();
-                repaint();
-            }
-            ScrollWorld.volume = newVolume;
-            volumeValue.setValue(newVolume);
-            BGMManager.setVolume(newVolume);
-        }
-        String clearGetKey = Greenfoot.getKey();
     }
 
+    /**
+     * Scrolls the world by 1 pixel right
+     */
+    public void scroll(){
+        if(frames%2 == 0){
+            moveCam(1,0);
+        }
+        frames++;
+    }
+
+    /**
+     * Changes the key bind of the given action
+     * 
+     * @param action Which movement's keybind to change
+     */
     public String changeKey(Label action){
         String newKey = Greenfoot.getKey();
         while(newKey == null || newKey.equals(Player.jump) || newKey.equals(Player.right) || 
         newKey.equals(Player.left) || newKey.equals(Player.dash) || newKey.equals("Enter")){
             newKey = Greenfoot.getKey();
-            scroller.act();
+            scroll();
             repaint();
         }
         action.setValue(newKey);

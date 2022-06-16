@@ -1,27 +1,33 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Gate here.
+ * An object that can send the player to the next level.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class Gate extends ScrollActor
 {
-    /**
-     * Act - do whatever the Gate wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-
     private int enterCount = 0;
     private Font constantia = new Font("Constantia",30);
     private InGameText continueText = new InGameText("Press 'Enter' to continue.",Color.WHITE,constantia,false);
     private boolean end;
 
+    /**
+     * Instantiates a new Gate
+     * 
+     * @param image The image of the gate
+     */
     public Gate(GreenfootImage image){
         setImage(image);
     }
 
+    /**
+     * Instantiates a new Gate
+     * 
+     * @param image The image of the gate
+     * @param end Whether or not this is the last level
+     */
     public Gate(GreenfootImage image,boolean end){
         setImage(image);
         this.end = end;
@@ -36,17 +42,31 @@ public class Gate extends ScrollActor
         }
         if(Greenfoot.isKeyDown("enter") && getOneIntersectingObject(Player.class) != null && enterCount < 1 && !Player.paused){
             if(end){
-                Stats.endTimer();
-                getWorld().changeWorld(new EndScreen());
-                enterCount++;
+                endGame();
             }else{
-                Player.level++;
-                Player.saveX = 0;
-                Player.saveY = 0;
-                Levels nextLvl = Player.levels[Player.level];
-                getWorld().changeWorld(nextLvl);
-                enterCount++;
+                nextLevel();
             }
         }
+    }
+
+    /**
+     * Sends the player to the ending world.
+     */
+    private void endGame(){
+        Stats.endTimer();
+        getWorld().changeWorld(new EndScreen());
+        enterCount++;
+    }
+
+    /**
+     * Sends the player to the next level
+     */
+    private void nextLevel(){
+        Player.level++;
+        Player.saveX = 0;
+        Player.saveY = 0;
+        Levels nextLvl = Player.levels[Player.level];
+        getWorld().changeWorld(nextLvl);
+        enterCount++;
     }
 }

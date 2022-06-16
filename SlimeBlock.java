@@ -1,22 +1,17 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class SlimeBlock here.
+ * A block that reverses and somewhat decreases the player's y velocity
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class SlimeBlock extends Block
 {
     /**
-     * Act - do whatever the SlimeBlock wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Instantiates a new SlimeBlock.
      */
-    
     public SlimeBlock(){
-        super(new GreenfootImage("slime.png"));
-        GreenfootImage slime = new GreenfootImage("slime.png");
-        slime.scale(48,48);
-        setImage(slime);
+        super(DetailsRenderer.slimeBlock);
     }
 }

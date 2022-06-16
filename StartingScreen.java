@@ -1,10 +1,10 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class StartingScreen here.
+ * The screen that the game starts on
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class StartingScreen extends ScrollWorld
 {
@@ -12,52 +12,94 @@ public class StartingScreen extends ScrollWorld
     private int currentStep = 0;
     Color color1 = new Color(20,226,176);
     Color color2 = new Color(250,247,136);
-    Font constantia = new Font("Constantia",true,false,30);
-    GreenfootImage startButton = new GreenfootImage("orangeButton.png");
-    GreenfootImage helpButton = new GreenfootImage("orangeButton.png");
-    GreenfootImage settingsButton = new GreenfootImage("orangeButton.png");
-    GreenfootImage storyButton = new GreenfootImage("orangeButton.png");
     Label start;
     Label help;
     Label settings;
     Label story;
     Label title;
-    private static int startingWorldCount = 0;
+    private int frames = 0;
     /**
-     * Constructor for objects of class StartingScreen.
-     * 
+     * Constructthe starting screen
      */
     public StartingScreen()
-    {    
-        // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
+    {
         super(711, 400, 1,true);
-        startButton.setFont(constantia);
+        
+        GreenfootImage startButton = new GreenfootImage("orangeButton.png");
+        GreenfootImage helpButton = new GreenfootImage("orangeButton.png");
+        GreenfootImage settingsButton = new GreenfootImage("orangeButton.png");
+        GreenfootImage storyButton = new GreenfootImage("orangeButton.png");
+        
+        startButton.setFont(DetailsRenderer.constantiaB30);
         startButton.drawString("START",50,28);
-        helpButton.setFont(constantia);
+        helpButton.setFont(DetailsRenderer.constantiaB30);
         helpButton.drawString("HELP",60,28);
-        settingsButton.setFont(constantia);
+        settingsButton.setFont(DetailsRenderer.constantiaB30);
         settingsButton.drawString("SETTINGS",30,28);
-        storyButton.setFont(constantia);
+        storyButton.setFont(DetailsRenderer.constantiaB30);
         storyButton.drawString("STORY",50,28);
+        
         start = new Label(startButton);
         help = new Label(helpButton);
         settings = new Label(settingsButton);
         story = new Label(storyButton);
+        
         title = new Label("The Journey",60);
         title.setFillColor(color1);
+        
         addObject(start,175,150);
         addObject(story,175,200);
         addObject(settings,175,250);
         addObject(title,200,70);
         addObject(help,175,300);
-        addCameraFollower(new Scroller(),0,0);
+        
         Player player = new Player();
         Player.help = false;
-        startingWorldCount++;
     }
 
     public void act(){
-        MouseInfo m = Greenfoot.getMouseInfo();
+        checkMouseClick();
+        if(currentStep < totalColorChangeSteps){
+            title.setFillColor(fade(title.getFillColor(),color2,currentStep));
+        }else if(currentStep > totalColorChangeSteps){
+            title.setFillColor(fade(title.getFillColor(),color1,currentStep));
+        }
+        if(currentStep == totalColorChangeSteps*2){
+            currentStep = 0;
+        }
+        BGMManager.setMusic(this);
+        currentStep++;
+        if(frames%2 == 0){
+            moveCam(1,0);
+        }
+        frames++;
+    }
+
+    /**
+     * Slowly changes one color to another
+     * 
+     * @param color1 The original colour
+     * @param color2 The desired colour
+     * @param currentStep The current step in the process of changing the colour 
+     */
+    private Color fade(Color color1, Color color2,int currentStep){
+        int dRed = color2.getRed() - color1.getRed();
+        int dGreen = color2.getGreen() - color1.getGreen();
+        int dBlue = color2.getBlue() -color1.getBlue();
+        Color c = color1;
+        if (dRed != 0 || dGreen != 0 || dBlue != 0) {
+            c = new Color(
+                color1.getRed() + ((dRed * (currentStep%totalColorChangeSteps)) / totalColorChangeSteps),
+                color1.getGreen() + ((dGreen * (currentStep%totalColorChangeSteps)) / totalColorChangeSteps),
+                color1.getBlue() + ((dBlue * (currentStep%totalColorChangeSteps)) / totalColorChangeSteps));
+        }
+        return c;
+    }
+
+    /**
+     * Checks if the mouse clicked on any buttons. If it did, it performs the appropriate methods.
+     */
+    public void checkMouseClick(){
         if(Greenfoot.mouseClicked(start)){
             changeWorld(Player.levels[Player.level]);
         }
@@ -70,32 +112,5 @@ public class StartingScreen extends ScrollWorld
         if(Greenfoot.mouseClicked(story)){
             changeWorld(new Story());
         }
-        if(currentStep < totalColorChangeSteps){
-            title.setFillColor(fade(title.getFillColor(),color2,currentStep));
-        }else if(currentStep > totalColorChangeSteps){
-            title.setFillColor(fade(title.getFillColor(),color1,currentStep));
-        }
-        if(currentStep == totalColorChangeSteps*2){
-            currentStep = 0;
-        }
-        if(startingWorldCount == 1){
-            ScrollWorld.music[0].playLoop();
-        }
-        currentStep++;
     }
-
-    private Color fade(Color color1, Color color2,int currentStep){
-        int dRed = color2.getRed() - color1.getRed();
-        int dGreen = color2.getGreen() - color1.getGreen();
-        int dBlue = color2.getBlue() -color1.getBlue();
-        Color c = color1;
-        if (dRed != 0 || dGreen != 0 || dBlue != 0) {
-                c = new Color(
-                        color1.getRed() + ((dRed * (currentStep%totalColorChangeSteps)) / totalColorChangeSteps),
-                        color1.getGreen() + ((dGreen * (currentStep%totalColorChangeSteps)) / totalColorChangeSteps),
-                        color1.getBlue() + ((dBlue * (currentStep%totalColorChangeSteps)) / totalColorChangeSteps));
-        }
-        return c;
-    }
-
 }

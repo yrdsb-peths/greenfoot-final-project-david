@@ -2,8 +2,10 @@ import greenfoot.*;
 import java.util.*;
 
 /**
- * The Player's Class
+ * The playable character's class. It manages all collision detection and movement. 
  * 
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class Player extends ScrollActor
 {
@@ -12,115 +14,82 @@ public class Player extends ScrollActor
     public static String left = "left";
     public static String right = "right";
     public static String dash = "0";
-    // Movement speeds in the x and y directions. Positive is to the right (for x) or down (for y)
+    // Movement speed-related values. Positive is to the right (for x) or down (for y)
     private int vY = 0;
     private int vX = 0;
     public static int speed = 5;
     private int jumpVelocity = -12;
-    private boolean isDashing = false;
-    private int bounceVY = 0;
-    // Gravity: how many cells per frame the player's vertical velocity (vY) increases by every frame
     public static double g = 1;
-    // The displacement of the player relative to a location
+    private int bounceVY = 0;
+    // The displacement of the player relative to a certain location (usually spanw point)
     public int movedX = 0;
     public int movedY = 0;
+    private int platformDY = 0;
     public static int saveX = 0;
     public static int saveY = 0;
-    // Used to determine whether or not the player can jump/double jump; also aids in setting the jump/double jump animations
-    public static boolean canJump = true;
-    private boolean jumped = false;
-    private int platformDY = 0;
-    private int markFrame = 0;
+    // Values for movement restrictions or collision restrictions
     private boolean canHead = true;
+    private boolean jumped = false;
+    private boolean isDashing = false;
+    private int markFrame = 0;
     private int isDashingCDTracker = 0;
-    // Direction that the player is facing and frame count (number of times act() is run). Both are used for sprites
+    public static boolean canJump = true;
+    public static boolean warpedToCheckpoint = false;
+    // Sprite manangement variables
     private int dir = 1;
     private int frames = 0;
-    // Arrays (and an image) for sprites of various actions
-    private GreenfootImage[] run = new GreenfootImage[6];
-    private GreenfootImage[] runL = new GreenfootImage[6];
-    private GreenfootImage[] idle = new GreenfootImage[4];
-    private GreenfootImage[] idleL = new GreenfootImage[4];
-    private GreenfootImage[] fall = new GreenfootImage[2];
-    private GreenfootImage[] fallL = new GreenfootImage[2];
-    private GreenfootImage[] jumpS = new GreenfootImage[4];
-    private GreenfootImage[] jumpSL = new GreenfootImage[4];
-    private GreenfootImage jumpSprite = new GreenfootImage("jump3.png");
-
-    public static boolean warpedToCheckpoint = false;
-
+    // Player sprites
+    private static GreenfootImage[] run = new GreenfootImage[6];
+    private static GreenfootImage[] runL = new GreenfootImage[6];
+    private static GreenfootImage[] idle = new GreenfootImage[4];
+    private static GreenfootImage[] idleL = new GreenfootImage[4];
+    private static GreenfootImage[] fall = new GreenfootImage[2];
+    private static GreenfootImage[] fallL = new GreenfootImage[2];
+    private static GreenfootImage[] jumpS = new GreenfootImage[4];
+    private static GreenfootImage[] jumpSL = new GreenfootImage[4];
+    private static GreenfootImage jumpSprite = new GreenfootImage("jump3.png");
+    // Game system variables
     public static boolean paused = false;
-    public static int level = 0;
     public static boolean help = false;
+    public static int level = 0;
     public static Levels[] levels = {new Level1(),new Level2(), new Level3(),new Level4(), new Level5(), new Level6()};
-    private static boolean startedTimer = false;
+    private static int playerCount = 0;
 
     /**
      * Constructs a player object and sets up the arrays of sprites with proper images
      */
     public Player(){
         super();
-        for(int i = 0; i < 6; i++){
-            run[i] = new GreenfootImage("run" + (i + 1) + ".png");
-            runL[i] = new GreenfootImage("run" + (i + 1) + ".png");
-            runL[i].mirrorHorizontally();
+        if(playerCount == 0){
+            for(int i = 0; i < 6; i++){
+                run[i] = new GreenfootImage("run" + (i + 1) + ".png");
+                runL[i] = new GreenfootImage("run" + (i + 1) + ".png");
+                runL[i].mirrorHorizontally();
+            }
+            for(int i = 0; i < 4; i++){
+                idle[i] = new GreenfootImage("idle" + (i+1) + ".png");
+                jumpS[i] = new GreenfootImage("jump" + (i+5) + ".png");
+                idleL[i] = new GreenfootImage("idle" + (i+1) + ".png");
+                jumpSL[i] = new GreenfootImage("jump" + (i+5) + ".png");
+                idleL[i].mirrorHorizontally();
+                jumpSL[i].mirrorHorizontally();
+            }
+            for(int i = 0; i < 2; i++){
+                fall[i] = new GreenfootImage("fall" + (i+1) + ".png");
+                fallL[i] = new GreenfootImage("fall" + (i+1) + ".png");
+                fallL[i].mirrorHorizontally();
+            }
         }
-        for(int i = 0; i < 4; i++){
-            idle[i] = new GreenfootImage("idle" + (i+1) + ".png");
-            jumpS[i] = new GreenfootImage("jump" + (i+5) + ".png");
-            idleL[i] = new GreenfootImage("idle" + (i+1) + ".png");
-            jumpSL[i] = new GreenfootImage("jump" + (i+5) + ".png");
-            idleL[i].mirrorHorizontally();
-            jumpSL[i].mirrorHorizontally();
-        }
-        for(int i = 0; i < 2; i++){
-            fall[i] = new GreenfootImage("fall" + (i+1) + ".png");
-            fallL[i] = new GreenfootImage("fall" + (i+1) + ".png");
-            fallL[i].mirrorHorizontally();
-        }
-    }
-
-    protected void addedToWorld(World world)  
-    {
-        ScrollWorld temp = (ScrollWorld)world;
-        temp.moveCam(saveX,saveY);
-        movedX += saveX;
-        movedY += saveY;
+        playerCount++;
     }
 
     public void act()
     {
-        setGravity();
         if(!paused){
-            if(touchingIce()){
-                speed = 7;
-            }else if(getWorld() == levels[2]){
-                speed = 4;
-            }else if(getWorld() == levels[5]){
-                speed = 3;
-            }else{
-                speed = 5;
-            }
-            if(getWorld() == levels[3]){
-                canJump = false;
-            }
+            setLevelRestrictions();
+            collisionCheckY();
             if(touchingIce()){
                 isDashingCDTracker = frames;
-            }
-            if(ground()){
-                vY = 0;
-                platformDY = 0;
-                markFrame = frames;
-                if(!touchingIce()){
-                    canJump = true;
-                }
-            }
-            if(head() && canHead){
-                vY = 0;
-                canHead = false;
-            }
-            if(!ground() && !isDashing){
-                vY += g;
             }
             if(isDashing && vX != 0){
                 vX -= dir*2;
@@ -128,7 +97,6 @@ public class Player extends ScrollActor
             }else if(vX == 0){
                 isDashing = false;
             }
-
             movement();
             setDir();
             getWorld().moveCam(vX,0);
@@ -140,7 +108,6 @@ public class Player extends ScrollActor
             checkStuckY();
             bounce();
             animate();
-
             movedX += vX;
             if(!help){
                 saveX += vX;
@@ -153,13 +120,47 @@ public class Player extends ScrollActor
                 vX -= dir;
             }
             frames++;
-
             warpToCheckpoint();
-            setCheckpointLocation();
         }
     }
 
-    public void setGravity(){
+    /**
+     * Checks if the player is hitting blocks in the y direction
+     */
+    public void collisionCheckY(){
+        if(ground()){
+            vY = 0;
+            platformDY = 0;
+            markFrame = frames;
+            if(!touchingIce()){
+                canJump = true;
+            }
+        }
+        if(head() && canHead){
+            vY = 0;
+            canHead = false;
+        }
+        if(!ground() && !isDashing){
+            vY += g;
+        }
+    }
+
+    /**
+     * Sets movement restrictions on the player depending on the current level
+     */
+    public void setLevelRestrictions(){
+        if(touchingIce()){
+            speed = 7;
+        }else if(getWorld() == levels[2]){
+            speed = 4;
+        }else if(getWorld() == levels[5]){
+            speed = 3;
+        }else{
+            speed = 5;
+        }
+        if(getWorld() == levels[3]){
+            canJump = false;
+        }
         if(getWorld() == levels[4]){
             g = 1.1;
         }else{
@@ -167,16 +168,9 @@ public class Player extends ScrollActor
         }
     }
 
-    /** Sets the location to teleport back to */
-    public void setCheckpointLocation(){
-        if(getOneIntersectingObject(Checkpoint.class) != null){
-            Checkpoint checkpoint = (Checkpoint) getOneIntersectingObject(Checkpoint.class);
-            movedX = getX() - checkpoint.getX();
-            movedY = getY() - checkpoint.getY();
-        }
-    }
-
-    /** Teleports the player back to the location set by SetCheckpointLocation(), default is spawn location */
+    /** 
+     * Teleports the player back to the last touched checkpoint, teleports to start of the world if none touched.
+     */
     public void warpToCheckpoint(){
         if(platformDY >= 44*48-200){
             getWorld().moveCam(-movedX, -movedY);
@@ -196,7 +190,9 @@ public class Player extends ScrollActor
         }
     }
 
-    /** Sets the direction of the sprites to be used */
+    /** 
+     * Sets the direction of the sprites to be used
+     */
     public void setDir(){
         if(Greenfoot.isKeyDown(left)){
             dir = -1;
@@ -204,14 +200,11 @@ public class Player extends ScrollActor
         if(Greenfoot.isKeyDown(right)){
             dir = 1;
         }
-        if(vX < 0){
-            dir = -1;
-        }else if(vX > 0){
-            dir = 1;
-        }
     }
 
-    /** To control player movement */
+    /** 
+     * Controls player movement based on user input
+     */
     public void movement(){
         if(Greenfoot.isKeyDown(left) && !left() && !isDashing){
             vX = -speed;
@@ -245,25 +238,30 @@ public class Player extends ScrollActor
         }
     }
 
-    /** To animate the player using the appropriate sprites from the arrays set up in the constructor */
+    /** 
+     * Animates the player using the appropriate sprites from the sprite arrays based on the direction that the player
+     * is facing
+     */
     public void animate(){
+        // Jump animation
         if(jumped && canJump){
             if(dir == -1){
                 GreenfootImage mirror = new GreenfootImage("jump3.png");
                 mirror.mirrorHorizontally();
                 setImage(mirror);
-            }else if(dir == 1){
+            }else{
                 setImage(jumpSprite);
             }
         }else if(!canJump){
             int jumpFrame = frames%12/3;
             if(dir == 1){
                 setImage(jumpS[jumpFrame]);
-            }else if(dir == -1){
+            }else{
                 setImage(jumpSL[jumpFrame]);
             }
             jumped = false;
         }
+        // Fall animation
         if(vY >= 0){
             int fallFrame = frames%8/4;
             if(dir == -1){
@@ -272,6 +270,7 @@ public class Player extends ScrollActor
                 setImage(fall[fallFrame]);
             }
         }
+        // Idle animation
         if(ground() && vX == 0){
             int idleFrame = frames % 24/6;
             if(dir == -1){
@@ -280,6 +279,7 @@ public class Player extends ScrollActor
                 setImage(idle[idleFrame]);
             }
         }
+        // Run animation
         if(ground() && (vX != 0 || Greenfoot.isKeyDown(left) || Greenfoot.isKeyDown(right))){
             int runFrame = frames%24/4;
             if(dir == -1){
@@ -288,6 +288,7 @@ public class Player extends ScrollActor
                 setImage(run[runFrame]);
             }
         }
+        //Dash animation
         if(isDashing){
             if(dir == -1){
                 GreenfootImage leftisDashing = new GreenfootImage("dash.png");
@@ -300,10 +301,12 @@ public class Player extends ScrollActor
     }
 
     /** All of the below use the idle sprite's dimensions for accuracy reasons (the sprite is 38x58) */
-    /** Checks whether the player is overlapping with a block in the vertical direction (top/bottom)
-     *  If they are, shifts the player up/down appropriately so that they are no longer in the block
+    /** 
+     * Checks whether the player is overlapping with a block in the vertical direction (top/bottom)
+     * If they are, shifts the player up/down appropriately so that they are no longer in the block
      */
     public void checkStuckY(){
+        // Checking for overlap at the bottom of the player
         if(checkStuckB() && !checkStuckT() && (vY != 0 || warpedToCheckpoint)){
             Block temp = null;
             if(dir == 1){
@@ -329,6 +332,7 @@ public class Player extends ScrollActor
             }
             warpedToCheckpoint = false;
         }
+        // Checking for overlap at the top of the player
         if(checkStuckT() && !checkStuckB() && (vY != 0 || warpedToCheckpoint)){
             Block temp1 = null;
             if(dir == 1){
@@ -354,10 +358,12 @@ public class Player extends ScrollActor
         }
     }
 
-    /** Checks whether the player overlaps with a block in the x direction (left/right)
-     *  If so, the player is shifted left/right appropriately so that they are no longer in the block
+    /** 
+     * Checks whether the player overlaps with a block in the x direction (left/right)
+     * If so, the player is shifted left/right appropriately so that they are no longer in the block
      */
     public void checkStuckX(){
+        // Checking for overlap at the left side of the player
         if(checkStuckL() && !checkStuckR()){
             Block temp = (Block) getOneObjectAtOffset(-38/2+3, 58/2-1, Block.class);
             if(temp == null){
@@ -374,6 +380,7 @@ public class Player extends ScrollActor
                 saveX += shiftX;
             }
         }
+        // Checking for overlap at the right side of the player
         if(checkStuckR() && !checkStuckL()){
             Block temp1 = (Block) getOneObjectAtOffset(38/2-3, 58/2-1, Block.class);
             if(temp1 == null){
@@ -392,7 +399,11 @@ public class Player extends ScrollActor
         }
     }
 
-    /** Checks whether or not the bottom of the player overlaps with a block */
+    /**
+     * Checks whether or not the player's bottom overlaps with a block
+     * 
+     * @return True if the player's bottom overlaps with a block, false otherwise
+     */
     public boolean checkStuckB(){
         if(vY < 0){
             return false;
@@ -406,7 +417,11 @@ public class Player extends ScrollActor
         }
     }
 
-    /** Checks whether or not the top of the player overlaps with a block */
+    /**
+     * Checks whether or not the player's top overlaps with a block
+     * 
+     * @return True if the player's top overlaps with a block, false otherwise
+     */
     public boolean checkStuckT(){
         if(vY >= 0){
             return false;
@@ -417,7 +432,11 @@ public class Player extends ScrollActor
                 (getOneObjectAtOffset(38/2-6, -58/2+1, Block.class) != null)));
     }
 
-    /** Checks whether or not the left of the player overlaps with a block */
+    /**
+     * Checks whether or not the player's left overlaps with a block
+     * 
+     * @return True if the player's left overlaps with a block, false otherwise
+     */
     public boolean checkStuckL(){
         if(dir == 1){
             return (false);
@@ -430,7 +449,11 @@ public class Player extends ScrollActor
         }
     }
 
-    /** Checks whether or not the right of the player overlaps with a block */
+    /**
+     * Checks whether or not the player's right overlaps with a block
+     * 
+     * @return True if the player's right overlaps with a block, false otherwise
+     */
     public boolean checkStuckR(){
         if(dir == 1){
             return (((getOneObjectAtOffset(38/2-2, -58/2, Block.class) != null) && 
@@ -443,7 +466,11 @@ public class Player extends ScrollActor
         }
     }
 
-    /** Checks whether or not the player is standing on a block (includes overlap) */
+    /**
+     * Checks whether or not the player's bottom touches a block
+     * 
+     * @return True if the player's bottom touches a block, false otherwise
+     */
     public boolean ground(){
         if(dir == 1){
             return ((getOneObjectAtOffset(-38/2+5, 58/2, Block.class) != null) ||
@@ -454,7 +481,11 @@ public class Player extends ScrollActor
         }
     }
 
-    /** Checks whether or not the player's head is hitting a block (includes overlap) */
+    /**
+     * Checks whether or not the player's top touches a block
+     * 
+     * @return True if the player's top touches a block, false otherwise
+     */
     public boolean head(){
         if(dir == 1){
             return (getOneObjectAtOffset(-38/2+3, -58/2+1, Block.class) != null || 
@@ -465,7 +496,11 @@ public class Player extends ScrollActor
         }
     }
 
-    /** Checks whether or not the player's left is touching a block (includes overlap) */
+    /**
+     * Checks whether or not the player's left touches a block
+     * 
+     * @return True if the player's left touches a block, false otherwise
+     */
     public boolean left(){
         return (((getOneObjectAtOffset(-38/2+1, -58/2, Block.class) != null) && 
                 (getOneObjectAtOffset(-38/2+1, -58/2+1, Block.class) != null)) || 
@@ -474,7 +509,11 @@ public class Player extends ScrollActor
             (getOneObjectAtOffset(-38/2+1,0,Block.class) != null));
     }
 
-    /** Checks whether or not the player's right is touching a block (includes overlap) */
+    /**
+     * Checks whether or not the player's right touches a block
+     * 
+     * @return True if the player's right touches a block, false otherwise
+     */
     public boolean right(){
         return (((getOneObjectAtOffset(38/2, -58/2, Block.class) != null) && 
                 (getOneObjectAtOffset(38/2, -58/2+1, Block.class) != null)) || 
@@ -483,6 +522,9 @@ public class Player extends ScrollActor
             (getOneObjectAtOffset(38/2,0,Block.class) != null));
     }
 
+    /**
+     * Bounces the player up if they touch a slime block by 90% of the velocity before touching it.
+     */
     public void bounce(){
         if((getOneObjectAtOffset(-38/2+5, 58/2, SlimeBlock.class) != null) ||
         (getOneObjectAtOffset(38/2-3, 58/2, SlimeBlock.class) != null) || 
@@ -500,6 +542,11 @@ public class Player extends ScrollActor
         }
     }
 
+    /**
+     * Checks if the player is touching an IceBlock.
+     * 
+     * @return True if the player is touching an IceBlock, false otherwise.
+     */
     public boolean touchingIce(){
         return((getOneObjectAtOffset(-38/2+5, 58/2, IceBlock.class) != null) ||
             (getOneObjectAtOffset(38/2-3, 58/2, IceBlock.class) != null) || 
@@ -507,10 +554,9 @@ public class Player extends ScrollActor
             (getOneObjectAtOffset(38/2-5, 58/2, IceBlock.class) != null));
     }
 
-    public Checkpoint getCheckpoint(){
-        return (Checkpoint)getOneIntersectingObject(Checkpoint.class);
-    }
-
+    /**
+     * Sets the world to the appropriate level.
+     */
     public void setWorld(int level){
         getWorld().changeWorld(levels[level]);
     }

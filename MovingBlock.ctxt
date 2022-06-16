@@ -1,6 +1,9 @@
 #BlueJ class context
 comment0.target=MovingBlock
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ MovingBlock\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ A\ block\ that\ can\ move.\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=image\ maxDist\ tracker\ speed\ moveX
 comment1.target=MovingBlock(greenfoot.GreenfootImage,\ int,\ Decor,\ int,\ boolean)
-numComments=2
+comment1.text=\r\n\ Instantiates\ a\ MovingBlock\r\n\ \r\n\ @param\ image\ The\ image\ of\ the\ block\r\n\ @param\ maxDist\ The\ maximum\ distance\ that\ the\ block\ can\ move\ in\ the\ given\ direction\ from\ the\ point\ \ \r\n\ that\ it\ is\ added\ to\ (positive\ x\ or\ positive\ y)\r\n\ @param\ tracker\ An\ object\ to\ track\ the\ original\ location\ of\ the\ movingBlock\r\n\ @param\ speed\ How\ fast\ the\ block\ moves\r\n\ @param\ moveX\ Whether\ or\ not\ the\ block\ moves\ in\ the\ x\ direction.\ If\ false,\ the\ block\ moves\ in\ the\ y\ direction\r\n
+comment2.params=
+comment2.target=void\ act()
+numComments=3

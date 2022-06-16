@@ -1,9 +1,7 @@
 #BlueJ class context
 comment0.target=Decor
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ Decor\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ An\ image\ that\ does\ not\ interact\ with\ anything.\ Also\ used\ as\ a\ location\ tracker.\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=image
 comment1.target=Decor(greenfoot.GreenfootImage)
-comment1.text=\r\n\ Act\ -\ do\ whatever\ the\ Decor\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n
-comment2.params=
-comment2.target=void\ act()
-numComments=3
+comment1.text=\r\n\ Instantiates\ a\ new\ decor.\r\n\ \r\n\ @param\ image\ The\ image\ of\ the\ Decor\r\n
+numComments=2

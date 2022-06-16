@@ -1,10 +1,10 @@
 import greenfoot.*;
 
 /**
- * Write a description of class TransitionAssist here.
+ * Creates a smooth, fading transition between worlds by slowly making a black panel fade in.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class TransitionAssist extends Actor
 {
@@ -13,10 +13,12 @@ public class TransitionAssist extends Actor
     private World world;
     GreenfootImage fade = new GreenfootImage(711,400);
     private boolean fadeIn;
-    private int volume = ScrollWorld.volume;
-    // world to set to
+    private int volume = BGMManager.volume;
+
     /**
      * Constructor for objects of class TransitionAssist
+     * 
+     * @param world The world to set to at the end of the transition. 
      */
     public TransitionAssist(World world)
     {
@@ -29,50 +31,38 @@ public class TransitionAssist extends Actor
 
     public void act(){
         if(frames < 28){
-            color = new Color(0,0,0,frames*8);
-            fade.setColor(color);
-            fade.fill();
-            setImage(fade);
-            volume = volume - volume/28;
-            BGMManager.setVolume(volume);
+            fadeOut();
         }
         if(frames >= 28){
-            Player.paused = false;
-            BGMManager.stopAllMusic();
-            BGMManager.setMusic(checkWorld());
-            BGMManager.setVolume(ScrollWorld.volume);
-            getWorld().removeObject(this);
-            if(Player.level == 0){
-                Stats.startTimer();
-            }
-            Greenfoot.setWorld(world);
+            transition();
         }
         frames++;
     }
     
-    public int checkWorld(){
-        if(world.getClass() == StartingScreen.class){
-            return 0;
-        }else if(world.getClass() == Story.class){
-            return 1;
-        }else if(world.getClass() == Settings.class){
-            return 2;
-        }else if(world.getClass() == Help.class){
-            return 3;
-        }else if(world.getClass() == Level1.class){
-            return 4;
-        }else if(world.getClass() == Level2.class){
-            return 5;
-        }else if(world.getClass() == Level3.class){
-            return 6;
-        }else if(world.getClass() == Level4.class){
-            return 7;
-        }else if(world.getClass() == Level5.class){
-            return 8;
-        }else if(world.getClass() == Level6.class){
-            return 9;
-        }else{
-            return 10;
+    /**
+     * Makes the world fade out by making a black panel fade in.
+     */
+    public void fadeOut(){
+        color = new Color(0,0,0,frames*8);
+        fade.setColor(color);
+        fade.fill();
+        setImage(fade);
+        volume = volume - volume/28;
+        BGMManager.setVolume(volume);
+    }
+
+    /**
+     * Changes the world. 
+     */
+    public void transition(){
+        Player.paused = false;
+        BGMManager.stopAllMusic();
+        BGMManager.setMusic(world);
+        BGMManager.setVolume(BGMManager.volume);
+        getWorld().removeObject(this);
+        if(Player.level == 0 && Player.saveY == 0){
+            Stats.startTimer();
         }
+        Greenfoot.setWorld(world);
     }
 }

@@ -1,13 +1,18 @@
 #BlueJ class context
 comment0.target=Level2
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ Level2\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ The\ second\ level\ of\ the\ game.\ Is\ a\ cave\ themed\ level.\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=
 comment1.target=Level2()
-comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ Level2.\r\n\ \r\n
+comment1.text=\r\n\ Constructs\ Level2.\r\n
 comment2.params=
-comment2.target=void\ construct()
+comment2.target=void\ act()
 comment3.params=
-comment3.target=void\ act()
-comment4.params=x\ y
-comment4.target=void\ addStone(int,\ int)
-numComments=5
+comment3.target=void\ addMisc()
+comment3.text=\r\n\ Adds\ miscellaneous\ actors\ to\ this\ world\r\n
+comment4.params=
+comment4.target=void\ addBlocks()
+comment4.text=\r\n\ Adds\ all\ actors\ of\ the\ Block.class\ or\ its\ subclasses\r\n
+comment5.params=x\ y
+comment5.target=void\ addStone(int,\ int)
+comment5.text=\r\n\ Adds\ a\ strip\ of\ stone\r\n\ \r\n\ @param\ x\ The\ x\ coordinate\ to\ add\ the\ strip\ at\r\n\ @param\ y\ The\ y\ coordinate\ to\ add\ the\ strip\ at\r\n
+numComments=6

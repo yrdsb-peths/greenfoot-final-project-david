@@ -1,24 +1,19 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Decor here.
+ * An image that does not interact with anything. Also used as a location tracker.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class Decor extends ScrollActor
 {
     /**
-     * Act - do whatever the Decor wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Instantiates a new decor.
+     * 
+     * @param image The image of the Decor
      */
-    
     public Decor(GreenfootImage image){
         setImage(image);
-    }
-    
-    public void act()
-    {
-        // Add your action code here.
     }
 }

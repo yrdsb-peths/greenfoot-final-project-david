@@ -1,14 +1,13 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Signs here.
+ * A sign that can be read by pressing the "Enter" key when prompted.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class Sign extends Decor
 {
-    private GreenfootImage blur = new GreenfootImage(711,400);
     private GreenfootImage sign = new GreenfootImage("sign text.png");
     private Font constantia = new Font("Constantia",30);
     private Decor grayed;
@@ -18,13 +17,15 @@ public class Sign extends Decor
     private int frames = 0;
     private int spamPrevention = 0;
     /**
-     * Act - do whatever the Signs wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Instantiates a new Sign.
+     * 
+     * @param sign The image of the sign
+     * @param text The text to be displayed when reading
      */
-
     public Sign(GreenfootImage sign, String text){
         super(sign);
         text = text;
+        GreenfootImage blur = new GreenfootImage(711,400);
         blur.setColor(new Color(128,128,128,75));
         blur.fill();
         grayed = new Decor(blur);
@@ -37,24 +38,45 @@ public class Sign extends Decor
 
     public void act()
     {
+        displayPrompt();
+        if(reading && Greenfoot.isKeyDown("enter") && frames - spamPrevention > 8){
+            stopReadingSign();
+        }else if(getOneIntersectingObject(Player.class) != null && Greenfoot.isKeyDown("enter") && !Player.paused && frames - spamPrevention > 8){
+            readSign();
+        }
+        frames++;
+    }
+
+    /**
+     * Prompts the user to press "Enter" to read the sign
+     */
+    private void displayPrompt(){
         if(getOneIntersectingObject(Player.class) != null){
             getWorld().addObject(text,670,330);
         }else{
             getWorld().removeObject(text);
         }
-        if(reading && Greenfoot.isKeyDown("enter") && frames - spamPrevention > 8){
-            Player.paused = false;
-            getWorld().removeObject(grayed);
-            getWorld().removeObject(readableSign);
-            reading = false;
-            spamPrevention = frames;
-        }else if(getOneIntersectingObject(Player.class) != null && Greenfoot.isKeyDown("enter") && !Player.paused && frames - spamPrevention > 8){
-            getWorld().addObject(grayed,getWorld().getWidth()/2,getWorld().getHeight()/2);
-            getWorld().addObject(readableSign,getWorld().getWidth()/2,getWorld().getHeight()/2);
-            Player.paused = true;
-            reading = true;
-            spamPrevention = frames;
-        }
-        frames++;
+    }
+
+    /**
+     * Opens up a panel to display what the sign says
+     */
+    private void readSign(){
+        getWorld().addObject(grayed,getWorld().getWidth()/2,getWorld().getHeight()/2);
+        getWorld().addObject(readableSign,getWorld().getWidth()/2,getWorld().getHeight()/2);
+        Player.paused = true;
+        reading = true;
+        spamPrevention = frames;
+    }
+
+    /**
+     * Closes the panel that displays what the sign says
+     */
+    private void stopReadingSign(){
+        Player.paused = false;
+        getWorld().removeObject(grayed);
+        getWorld().removeObject(readableSign);
+        reading = false;
+        spamPrevention = frames;
     }
 }

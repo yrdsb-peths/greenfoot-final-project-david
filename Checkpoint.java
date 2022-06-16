@@ -1,21 +1,34 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class CheckPoint here.
+ * Sets the player's spawn to this object.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class Checkpoint extends ScrollActor
 {
     /**
-     * Act - do whatever the CheckPoint wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Instantiates a new Checkpoint.
      */
-    
     public Checkpoint(){
         GreenfootImage image = getImage();
         image.scale(48,58);
         setImage(image);
+    }
+    
+    public void act(){
+        if(getOneIntersectingObject(Player.class) != null){
+            setCheckpointLocation();
+        }
+    }
+    
+    /**
+     * Sets the player's spawn point to this Checkpoint object.
+     */
+    public void setCheckpointLocation(){
+        Player player = (Player)getOneIntersectingObject(Player.class);
+        player.movedX = player.getX() - getX();
+        player.movedY = player.getY() - getY();
     }
 }

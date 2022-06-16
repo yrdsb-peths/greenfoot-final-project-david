@@ -1,20 +1,18 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Block here.
+ * A block that the player can collide with.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author David Jiang 
+ * @version 2022/06/16
  */
 public class Block extends ScrollActor
 {
-    /**
-     * Act - do whatever the Block wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+    /** 
+     * Instantiates a block
+     * 
+     * @param image The image of the block
      */
-    private int count = 0;
-    private long time;
-    private boolean setPos = true;
     public Block(GreenfootImage image){
         setImage(image);
     }

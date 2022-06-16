@@ -1,11 +1,15 @@
 #BlueJ class context
 comment0.target=StartingScreen
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ StartingScreen\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ The\ screen\ that\ the\ game\ starts\ on\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=
 comment1.target=StartingScreen()
-comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ StartingScreen.\r\n\ \r\n
+comment1.text=\r\n\ Constructthe\ starting\ screen\r\n
 comment2.params=
 comment2.target=void\ act()
 comment3.params=color1\ color2\ currentStep
 comment3.target=greenfoot.Color\ fade(greenfoot.Color,\ greenfoot.Color,\ int)
-numComments=4
+comment3.text=\r\n\ Slowly\ changes\ one\ color\ to\ another\r\n\ \r\n\ @param\ color1\ The\ original\ colour\r\n\ @param\ color2\ The\ desired\ colour\r\n\ @param\ currentStep\ The\ current\ step\ in\ the\ process\ of\ changing\ the\ colour\ \r\n
+comment4.params=
+comment4.target=void\ checkMouseClick()
+comment4.text=\r\n\ Checks\ if\ the\ mouse\ clicked\ on\ any\ buttons.\ If\ it\ did,\ it\ performs\ the\ appropriate\ methods.\r\n
+numComments=5
