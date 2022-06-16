@@ -23,11 +23,14 @@ public class Level5 extends Levels
         addCameraFollower(player,0,75);
         addCameraFollower(pause,-320,-170);
         addObject(title,600,80);
+        
+        addCameraFollower(cheatButton,getWidth()/2-5,getHeight()/2-5);
     }
 
     public void act(){
         scrollSkyAndVoid();
         resetBreakingBlocks();
+        toggleCheats();
     }
 
     /**
@@ -75,6 +78,8 @@ public class Level5 extends Levels
         addObject(new Block(DetailsRenderer.magmaBlock),1098,360);
         
         addObject(new Block(DetailsRenderer.barrier),2925,300);
+        topBorder = new Block(new GreenfootImage(2950,50));
+        addObject(topBorder,1475,-125);
     }
 
     /**

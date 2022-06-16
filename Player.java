@@ -54,6 +54,7 @@ public class Player extends ScrollActor
     public static int level = 0;
     public static Levels[] levels = {new Level1(),new Level2(), new Level3(),new Level4(), new Level5(), new Level6()};
     private static int playerCount = 0;
+    public static boolean cheatsOn = false;
 
     /**
      * Constructs a player object and sets up the arrays of sprites with proper images
@@ -104,7 +105,7 @@ public class Player extends ScrollActor
             getWorld().moveCam(0,vY);
             bounceVY = vY;
             movedY += vY;
-            platformDY += Math.abs(vY);
+            platformDY += vY;
             checkStuckY();
             bounce();
             animate();
@@ -118,6 +119,9 @@ public class Player extends ScrollActor
             }
             if(touchingIce() && vX != 0 && !(Greenfoot.isKeyDown(left) || Greenfoot.isKeyDown(right)) && frames%4 == 0 && !isDashing){
                 vX -= dir;
+            }
+            if(cheatsOn){
+                vY = 0;
             }
             frames++;
             warpToCheckpoint();
@@ -140,7 +144,7 @@ public class Player extends ScrollActor
             vY = 0;
             canHead = false;
         }
-        if(!ground() && !isDashing){
+        if(!ground() && !isDashing && !cheatsOn){
             vY += g;
         }
     }
@@ -172,7 +176,7 @@ public class Player extends ScrollActor
      * Teleports the player back to the last touched checkpoint, teleports to start of the world if none touched.
      */
     public void warpToCheckpoint(){
-        if(platformDY >= 44*48-200){
+        if(platformDY >= 1912){
             getWorld().moveCam(-movedX, -movedY);
             platformDY = 0;
             vY = 0;
@@ -212,7 +216,7 @@ public class Player extends ScrollActor
         if(Greenfoot.isKeyDown(right) && !right() && !isDashing){
             vX = speed;
         }
-        if(Greenfoot.isKeyDown(jump)&& ground()){
+        if(Greenfoot.isKeyDown(jump)&& (ground() || cheatsOn)){
             vY = jumpVelocity;
             jumped = true;
             canHead = true;

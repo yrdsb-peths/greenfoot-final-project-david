@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Player
-comment0.text=\r\n\ The\ playable\ character's\ class.\ It\ manages\ all\ collision\ detection\ and\ movement.\ \r\n\ \r\n\ \r\n
+comment0.text=\r\n\ The\ playable\ character's\ class.\ It\ manages\ all\ collision\ detection\ and\ movement.\ \r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=
 comment1.target=Player()
 comment1.text=\r\n\ Constructs\ a\ player\ object\ and\ sets\ up\ the\ arrays\ of\ sprites\ with\ proper\ images\r\n

@@ -14,25 +14,40 @@ public abstract class Levels extends ScrollWorld
     public Decor[] trackers;
     public Decor[] skyScroll = new Decor[2];
     public Decor[] voidScroll = new Decor[2];
+    public Decor cheatButton;
+    public Block topBorder;
     /**
-     * Constructor for instances of Levels.
-     * 
-     * @param width Width of the world, in pixels
-     * @param height Height of the world, in pixels
-     * @param cellSize Size of the cell of the world, in pixels
-     * @param inverted Whether or not the world scrolls with inverted backgrounds
-     * @param numBreakingBlocks Number of BreakingBlocks to be created in the world
-     * 
-     */
+    * Constructor for instances of Levels.
+    * 
+    * @param width Width of the world, in pixels
+    * @param height Height of the world, in pixels
+    * @param cellSize Size of the cell of the world, in pixels
+    * @param inverted Whether or not the world scrolls with inverted backgrounds
+    * @param numBreakingBlocks Number of BreakingBlocks to be created in the world
+    * 
+    */
     public Levels(int width, int height, int cellSize, boolean inverted, int numBreakingBlocks)
     {
         super(width,height,cellSize,inverted);
-        
+
+        GreenfootImage button = new GreenfootImage("orangeButton.png");
+        button.scale(5,5);
+        cheatButton = new Decor(button);
+
         breakingBlock = new BreakingBlock[numBreakingBlocks];
         trackers = new Decor[numBreakingBlocks];
         
         pause = new PauseButton();
         player = new Player();
+    }
+
+    /**
+     * Toggles the cheats. If on, the player experiences no gravity
+     */
+    public void toggleCheats(){
+        if(Greenfoot.mouseClicked(cheatButton)){
+            Player.cheatsOn = !Player.cheatsOn;
+        }
     }
 
     /**
@@ -69,7 +84,7 @@ public abstract class Levels extends ScrollWorld
             addObject(new Block(DetailsRenderer.barrier),586,225);
         }
     }
-    
+
     /**
      * Implements a sky
      * 
@@ -101,7 +116,7 @@ public abstract class Levels extends ScrollWorld
             addObject(black,-358+716*i,getHeight()/2+1200);
         }
     }
-    
+
     /**
      * Scrolls the sky and the void
      */
@@ -123,7 +138,7 @@ public abstract class Levels extends ScrollWorld
             }
         }
     }
-    
+
     /**
      * Adds a breaking block to the world
      * 

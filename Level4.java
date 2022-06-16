@@ -23,10 +23,13 @@ public class Level4 extends Levels
         addCameraFollower(player,0,75);
         addCameraFollower(pause,-320,-170);
         addObject(title,535,80);
+        
+        addCameraFollower(cheatButton,getWidth()/2-5,getHeight()/2-5);
     }
 
     public void act(){
         scrollSkyAndVoid();
+        toggleCheats();
     }
 
     /**
@@ -63,10 +66,13 @@ public class Level4 extends Levels
         addObject(new IceBlock(DetailsRenderer.iceBlock),1120,324);
         addObject(new IceBlock(DetailsRenderer.iceBlock),1168,324);
         addObject(new IceBlock(DetailsRenderer.iceBlock),1660,324);
-        addObject(new Block(DetailsRenderer.barrier),2677,300);
         
         addMovingBlock(1264,324,300,3,true);
         addMovingBlock(1756,324,400,4,true);
+        
+        addObject(new Block(DetailsRenderer.barrier),2677,300);
+        topBorder = new Block(new GreenfootImage(2702,50));
+        addObject(topBorder,1351,-125);
     }
 
     /**
