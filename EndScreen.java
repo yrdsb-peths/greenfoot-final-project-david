@@ -116,5 +116,7 @@ public class EndScreen extends ScrollWorld
         Player.level = 0;
         Stats.jumps = 0;
         Stats.deaths = 0;
+        Levels[] newLevels = {new Level1(),new Level2(), new Level3(), new Level4(),new Level5(),new Level6()};
+        Player.levels =  newLevels;
     }
 }
