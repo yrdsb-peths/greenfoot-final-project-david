@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=BGMManager
-comment0.text=\r\n\ A\ class\ made\ for\ the\ sole\ purpose\ of\ providing\ a\ way\ to\ manage\ the\ music\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/15\r\n
+comment0.text=\r\n\ A\ class\ made\ for\ the\ sole\ purpose\ of\ managing\ the\ music\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/15\r\n
 comment1.params=world
 comment1.target=void\ setMusic(greenfoot.World)
 comment1.text=\r\n\ Sets\ the\ music\ based\ on\ the\ given\ world\r\n\ \r\n\ @param\ world\ The\ world\ that\ the\ music\ is\ to\ be\ played\ for\r\n

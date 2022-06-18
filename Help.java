@@ -54,7 +54,7 @@ public class Help extends ScrollWorld
     }
 
     public void act(){
-        // To scroll the small platform
+        // To scroll the small platform that the player is on
         for(Block block : allBlocks){
             if(block.getX() < 415){
                 block.setLocation(block.getX()+260,block.getY());

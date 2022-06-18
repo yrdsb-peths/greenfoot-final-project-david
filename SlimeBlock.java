@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * A block that reverses and somewhat decreases the player's y velocity
+ * A block that would reverse and somewhat decrease the player's y velocity
  * 
  * @author David Jiang 
  * @version 2022/06/16

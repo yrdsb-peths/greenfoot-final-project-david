@@ -61,6 +61,7 @@ public class Player extends ScrollActor
      */
     public Player(){
         super();
+        // Sprite setup
         if(playerCount == 0){
             for(int i = 0; i < 6; i++){
                 run[i] = new GreenfootImage("run" + (i + 1) + ".png");
@@ -89,17 +90,28 @@ public class Player extends ScrollActor
         if(!paused){
             setLevelRestrictions();
             collisionCheckY();
+            
+            // To prevent dashing on ice
             if(touchingIce()){
                 isDashingCDTracker = frames;
             }
+            
+            // For x velocity while dashing
             if(isDashing && vX != 0){
                 vX -= dir*2;
                 vY = 0;
-            }else if(vX == 0){
+            }
+            if(isDashing && ((vX < 0 && Greenfoot.isKeyDown(right)) || vX > 0 && Greenfoot.isKeyDown(left))){
+                vX = 0;
+            }
+            if(vX == 0){
                 isDashing = false;
             }
+            
             movement();
             setDir();
+            
+            // Movement and collision checking
             getWorld().moveCam(vX,0);
             checkStuckX();
             getWorld().moveCam(0,vY);
@@ -108,18 +120,24 @@ public class Player extends ScrollActor
             platformDY += vY;
             checkStuckY();
             bounce();
+            
             animate();
+            
+            // Location tracking
             movedX += vX;
             if(!help){
                 saveX += vX;
                 saveY += vY;
             }
+            
+            // Changing x velocity at the end of movement based on whether the player is touching ice
             if(!isDashing && !touchingIce()){
                 vX = 0;
             }
             if(touchingIce() && vX != 0 && !(Greenfoot.isKeyDown(left) || Greenfoot.isKeyDown(right)) && frames%4 == 0 && !isDashing){
                 vX -= dir;
             }
+            
             if(cheatsOn){
                 vY = 0;
             }
@@ -178,6 +196,8 @@ public class Player extends ScrollActor
     public void warpToCheckpoint(){
         if(platformDY >= 1912){
             getWorld().moveCam(-movedX, -movedY);
+            
+            // Resetting location tracking on the player
             platformDY = 0;
             vY = 0;
             vX = 0;
@@ -185,6 +205,7 @@ public class Player extends ScrollActor
             saveY -= movedY;
             movedX = 0;
             movedY = 0;
+            
             warpedToCheckpoint = true;
             if(((Levels)getWorld()).breakingBlock.length != 0){
                 ((Levels)getWorld()).resetBreakingBlocks();

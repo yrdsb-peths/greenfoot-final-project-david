@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * The screen that the game starts on
+ * The screen that the game starts on; the title screen
  * 
  * @author David Jiang 
  * @version 2022/06/16
@@ -10,13 +10,16 @@ public class StartingScreen extends ScrollWorld
 {
     private final int totalColorChangeSteps = 250;
     private int currentStep = 0;
+    
     Color color1 = new Color(20,226,176);
     Color color2 = new Color(250,247,136);
+    
     Label start;
     Label help;
     Label settings;
     Label story;
     Label title;
+    
     private int frames = 0;
     /**
      * Constructthe starting screen

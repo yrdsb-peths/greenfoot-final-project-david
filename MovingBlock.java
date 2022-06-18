@@ -32,6 +32,7 @@ public class MovingBlock extends IceBlock
         this.moveX = moveX;
     }
 
+    /** To set direction and move the block */
     public void act(){
         if(moveX){
             if(tracker.getX() == getX()){

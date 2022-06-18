@@ -11,7 +11,9 @@ public class Settings extends ScrollWorld
     private GreenfootImage panel = new GreenfootImage(300,330);
     private GreenfootImage controls;
     private GreenfootImage otherSettings;
+    
     private Color color = new Color(233,252,20);
+    
     private Label controlsPanel;
     private Label othersPanel;
     private Label jumpKey;
@@ -19,12 +21,12 @@ public class Settings extends ScrollWorld
     private Label leftKey;
     private Label dashKey;
     private Label volumeValue;
+    
     private int newVolume = -1;
     private BackButton back;
     private int frames = 0;
     /**
      * Creates an instance of this world that sends the player to the starting screen
-     * 
      */
 
     public Settings(){
@@ -68,6 +70,15 @@ public class Settings extends ScrollWorld
         othersPanel = new Label(otherSettings);
         addObject(othersPanel,515,210);
 
+        setupLabels();
+
+        setupKeyBindInputs();
+    }
+
+    /**
+     * Sets up the labels for which input zone is for what setting
+     */
+    public void setupLabels(){
         Label jump = new Label("Jump",30);
         addObject(jump,110,140);
 
@@ -82,7 +93,12 @@ public class Settings extends ScrollWorld
 
         Label volume = new Label("Volume",30);
         addObject(volume,450,200);
-
+    }
+    
+    /**
+     * Sets up the area to input the new setting values
+     */
+    public void setupKeyBindInputs(){
         jumpKey = new Label(new GreenfootImage("white.png"));
         jumpKey.setValue(Player.jump);
         jumpKey.setFontSize(20);
@@ -108,7 +124,7 @@ public class Settings extends ScrollWorld
         volumeValue.setFontSize(20);
         addObject(volumeValue,580,200);
     }
-
+    
     public void act(){
         checkClickedKey();
         if(Greenfoot.mouseClicked(volumeValue)){

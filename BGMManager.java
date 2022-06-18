@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * A class made for the sole purpose of providing a way to manage the music
+ * A class made for the sole purpose of managing the music
  * 
  * @author David Jiang 
  * @version 2022/06/15

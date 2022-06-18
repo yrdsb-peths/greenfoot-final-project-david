@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=StartingScreen
-comment0.text=\r\n\ The\ screen\ that\ the\ game\ starts\ on\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
+comment0.text=\r\n\ The\ screen\ that\ the\ game\ starts\ on;\ the\ title\ screen\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=
 comment1.target=StartingScreen()
 comment1.text=\r\n\ Constructthe\ starting\ screen\r\n

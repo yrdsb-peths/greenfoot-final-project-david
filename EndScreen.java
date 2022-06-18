@@ -12,18 +12,24 @@ public class EndScreen extends ScrollWorld
     private int minutes;
     private int seconds;
     private int millis;
+    
     private PlayerDummy dummy;
+    
     private int setupFrames;
     private int frames = 0;
+    
     private Label panel;
+    
     private InGameText congratulation;
     private InGameText timeSpent;
     private InGameText totalJumps;
     private InGameText totalDeaths;
-    private BackButton continueButton;
+    
     private InGameText timeLabel;
     private InGameText jumpLabel;
     private InGameText deathLabel;
+    
+    private BackButton continueButton;
     /**
      * Constructor for the EndScreen world.
      * 
@@ -95,7 +101,7 @@ public class EndScreen extends ScrollWorld
     }
 
     /**
-     * Calculates the time taken to finish the game in hours,minutes,seconds,milliseconds
+     * Calculates the time taken to finish the game in hours, minutes, seconds, milliseconds
      */
     private void calculateTime(){
         long time = Stats.endTime-Stats.startTime;
@@ -106,7 +112,7 @@ public class EndScreen extends ScrollWorld
     }
 
     /**
-     * Resets the player's statistics
+     * Resets the player's statistics and each level
      */
     private void reset(){
         Player.speed = 5;

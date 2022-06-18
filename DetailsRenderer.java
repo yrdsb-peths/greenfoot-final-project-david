@@ -2,7 +2,8 @@ import greenfoot.GreenfootImage;
 import greenfoot.Font;
 
 /**
- * A class used solely to store commonly used images and fonts to save memory space.
+ * A class used solely to store commonly used images and fonts. 
+ * Saves memory space by removing the need to repeatedly instantiate the same GreenfootImages and fonts
  * 
  * @author David Jiang 
  * @version 2022/06/16

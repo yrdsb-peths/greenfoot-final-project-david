@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=SlimeBlock
-comment0.text=\r\n\ A\ block\ that\ reverses\ and\ somewhat\ decreases\ the\ player's\ y\ velocity\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
+comment0.text=\r\n\ A\ block\ that\ would\ reverse\ and\ somewhat\ decrease\ the\ player's\ y\ velocity\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=
 comment1.target=SlimeBlock()
 comment1.text=\r\n\ Instantiates\ a\ new\ SlimeBlock.\r\n

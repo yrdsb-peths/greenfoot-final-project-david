@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * A world to help players get started
+ * A world that describes the lore of the game
  * 
  * @author David Jiang 
  * @version 2022/06/16

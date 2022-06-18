@@ -57,6 +57,7 @@ public abstract class ScrollWorld extends World
 
         scrollPosX = 0;
         scrollPosY = 0;
+        // bigBackground is the image that the camera scrolls over
         if(inverted){
             bigBackground = new GreenfootImage(width*3,height*2);
         }else{

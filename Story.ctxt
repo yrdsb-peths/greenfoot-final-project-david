@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Story
-comment0.text=\r\n\ A\ world\ to\ help\ players\ get\ started\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
+comment0.text=\r\n\ A\ world\ that\ describes\ the\ lore\ of\ the\ game\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=
 comment1.target=Story()
 comment1.text=\r\n\ Constructs\ a\ help\ world\r\n

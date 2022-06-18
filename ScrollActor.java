@@ -17,7 +17,7 @@ public abstract class ScrollActor extends Actor
     private ScrollWorld world;
     public boolean timer = false;
     
-    // Corrdinate systems
+    // Coordinate systems
     private int camX, camY;
     private int globalX, globalY;
     

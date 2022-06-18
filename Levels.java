@@ -2,6 +2,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
  * A class to facilitate the creation of levels. 
+ * Superclass of all of the levels
  * 
  * @author David Jiang 
  * @version 2022/06/16
@@ -102,7 +103,7 @@ public abstract class Levels extends ScrollWorld
     }
 
     /**
-     * Adds the void
+     * Adds the void (the place that the player falls into)
      * 
      * @param color The color for the void
      */

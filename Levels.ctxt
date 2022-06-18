@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Levels
-comment0.text=\r\n\ A\ class\ to\ facilitate\ the\ creation\ of\ levels.\ \r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
+comment0.text=\r\n\ A\ class\ to\ facilitate\ the\ creation\ of\ levels.\ \r\n\ Superclass\ of\ all\ of\ the\ levels\r\n\ \r\n\ @author\ David\ Jiang\ \r\n\ @version\ 2022/06/16\r\n
 comment1.params=width\ height\ cellSize\ inverted\ numBreakingBlocks
 comment1.target=Levels(int,\ int,\ int,\ boolean,\ int)
 comment1.text=\r\n\ Constructor\ for\ instances\ of\ Levels.\r\n\ \r\n\ @param\ width\ Width\ of\ the\ world,\ in\ pixels\r\n\ @param\ height\ Height\ of\ the\ world,\ in\ pixels\r\n\ @param\ cellSize\ Size\ of\ the\ cell\ of\ the\ world,\ in\ pixels\r\n\ @param\ inverted\ Whether\ or\ not\ the\ world\ scrolls\ with\ inverted\ backgrounds\r\n\ @param\ numBreakingBlocks\ Number\ of\ BreakingBlocks\ to\ be\ created\ in\ the\ world\r\n\ \r\n
@@ -15,7 +15,7 @@ comment4.target=void\ addSky(greenfoot.Color)
 comment4.text=\r\n\ Implements\ a\ sky\r\n\ \r\n\ @param\ color\ The\ color\ for\ the\ sky\r\n
 comment5.params=color
 comment5.target=void\ addVoid(greenfoot.Color)
-comment5.text=\r\n\ Adds\ the\ void\r\n\ \r\n\ @param\ color\ The\ color\ for\ the\ void\r\n
+comment5.text=\r\n\ Adds\ the\ void\ (the\ place\ that\ the\ player\ falls\ into)\r\n\ \r\n\ @param\ color\ The\ color\ for\ the\ void\r\n
 comment6.params=
 comment6.target=void\ scrollSkyAndVoid()
 comment6.text=\r\n\ Scrolls\ the\ sky\ and\ the\ void\r\n

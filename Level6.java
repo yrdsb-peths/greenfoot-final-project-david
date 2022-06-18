@@ -39,7 +39,9 @@ public class Level6 extends Levels
         
         title = new InGameText("HOME SWEET HOME",Color.WHITE,DetailsRenderer.constantiaB40,true);
         
-        Decor sign = new Decor(DetailsRenderer.arrowSign);
+        GreenfootImage arrowSign = new GreenfootImage(DetailsRenderer.arrowSign);
+        arrowSign.mirrorHorizontally();
+        Decor sign = new Decor(arrowSign);
         addObject(sign,192,287);
         
         addObject(new Checkpoint(),-450,249);
