@@ -90,12 +90,12 @@ public class Player extends ScrollActor
         if(!paused){
             setLevelRestrictions();
             collisionCheckY();
-            
+
             // To prevent dashing on ice
             if(touchingIce()){
                 isDashingCDTracker = frames;
             }
-            
+
             // For x velocity while dashing
             if(isDashing && vX != 0){
                 vX -= dir*2;
@@ -107,10 +107,10 @@ public class Player extends ScrollActor
             if(vX == 0){
                 isDashing = false;
             }
-            
+
             movement();
             setDir();
-            
+
             // Movement and collision checking
             getWorld().moveCam(vX,0);
             checkStuckX();
@@ -120,16 +120,16 @@ public class Player extends ScrollActor
             platformDY += vY;
             checkStuckY();
             bounce();
-            
+
             animate();
-            
+
             // Location tracking
             movedX += vX;
             if(!help){
                 saveX += vX;
                 saveY += vY;
             }
-            
+
             // Changing x velocity at the end of movement based on whether the player is touching ice
             if(!isDashing && !touchingIce()){
                 vX = 0;
@@ -137,7 +137,7 @@ public class Player extends ScrollActor
             if(touchingIce() && vX != 0 && !(Greenfoot.isKeyDown(left) || Greenfoot.isKeyDown(right)) && frames%4 == 0 && !isDashing){
                 vX -= dir;
             }
-            
+
             if(cheatsOn){
                 vY = 0;
             }
@@ -196,7 +196,7 @@ public class Player extends ScrollActor
     public void warpToCheckpoint(){
         if(platformDY >= 1912){
             getWorld().moveCam(-movedX, -movedY);
-            
+
             // Resetting location tracking on the player
             platformDY = 0;
             vY = 0;
@@ -205,7 +205,7 @@ public class Player extends ScrollActor
             saveY -= movedY;
             movedX = 0;
             movedY = 0;
-            
+
             warpedToCheckpoint = true;
             if(((Levels)getWorld()).breakingBlock.length != 0){
                 ((Levels)getWorld()).resetBreakingBlocks();
@@ -256,7 +256,7 @@ public class Player extends ScrollActor
             isDashing = false;
             Stats.jumps++;
         }
-        if(Greenfoot.isKeyDown(dash) && (frames - isDashingCDTracker) > 35){
+        if(Greenfoot.isKeyDown(dash) && (frames - isDashingCDTracker) > 35 && !((dir == 1 && right()) || (dir == -1 && left()))){
             vX = (speed*4+2) * dir;
             isDashing = true;
             isDashingCDTracker = frames;
@@ -332,7 +332,7 @@ public class Player extends ScrollActor
      */
     public void checkStuckY(){
         // Checking for overlap at the bottom of the player
-        if(checkStuckB() && !checkStuckT() && (vY != 0 || warpedToCheckpoint)){
+        if(checkStuckB() && !checkStuckT() && (vY != 0 || warpedToCheckpoint) && !isDashing){
             Block temp = null;
             if(dir == 1){
                 temp = (Block) getOneObjectAtOffset(38/2-3, 58/2, Block.class);
@@ -345,7 +345,7 @@ public class Player extends ScrollActor
                     temp = (Block) getOneObjectAtOffset(-38/2+3, 58/2, Block.class);
                 }
             }
-            if(temp != null){
+            if(temp != null && Math.abs(getY() - (temp.getY()-temp.getImage().getHeight()/2)) <= 58/2){
                 int blockY = temp.getY();
                 int shiftY = temp.getImage().getHeight()/2+58/2-(blockY-getY());
                 getWorld().moveCam(0, -shiftY);
@@ -358,7 +358,7 @@ public class Player extends ScrollActor
             warpedToCheckpoint = false;
         }
         // Checking for overlap at the top of the player
-        if(checkStuckT() && !checkStuckB() && (vY != 0 || warpedToCheckpoint)){
+        if(checkStuckT() && !checkStuckB() && (vY != 0 || warpedToCheckpoint) && !isDashing){
             Block temp1 = null;
             if(dir == 1){
                 temp1 = (Block) getOneObjectAtOffset(38/2-3, -58/2, Block.class);
@@ -371,7 +371,7 @@ public class Player extends ScrollActor
                     temp1 = (Block) getOneObjectAtOffset(-38/2+3, -58/2, Block.class);
                 }
             }
-            if(temp1 != null){
+            if(temp1 != null && Math.abs(getY() - (temp1.getY()-temp1.getImage().getHeight()/2)) <= 58/2){
                 int blockY1 = temp1.getY();
                 int shiftY1 = temp1.getImage().getHeight()/2+58/2-Math.abs(blockY1-getY());
                 getWorld().moveCam(0, shiftY1);
